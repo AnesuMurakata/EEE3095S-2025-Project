@@ -1,0 +1,1583 @@
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"command_processor.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/command_processor.c"
+  20              		.section	.text.CommandProcessor_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	CommandProcessor_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	CommandProcessor_Init:
+  28              	.LFB137:
+   1:Core/Src/command_processor.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/command_processor.c **** /**
+   3:Core/Src/command_processor.c ****   ******************************************************************************
+   4:Core/Src/command_processor.c ****   * @file           : command_processor.c
+   5:Core/Src/command_processor.c ****   * @brief          : Command processor implementation for message protocol
+   6:Core/Src/command_processor.c ****   ******************************************************************************
+   7:Core/Src/command_processor.c ****   * @attention
+   8:Core/Src/command_processor.c ****   *
+   9:Core/Src/command_processor.c ****   * Copyright (c) 2025 STMicroelectronics.
+  10:Core/Src/command_processor.c ****   * All rights reserved.
+  11:Core/Src/command_processor.c ****   *
+  12:Core/Src/command_processor.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Core/Src/command_processor.c ****   * in the root directory of this software component.
+  14:Core/Src/command_processor.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Core/Src/command_processor.c ****   *
+  16:Core/Src/command_processor.c ****   ******************************************************************************
+  17:Core/Src/command_processor.c ****   */
+  18:Core/Src/command_processor.c **** /* USER CODE END Header */
+  19:Core/Src/command_processor.c **** 
+  20:Core/Src/command_processor.c **** /* Includes ------------------------------------------------------------------*/
+  21:Core/Src/command_processor.c **** #include "command_processor.h"
+  22:Core/Src/command_processor.c **** 
+  23:Core/Src/command_processor.c **** /* Private includes ----------------------------------------------------------*/
+  24:Core/Src/command_processor.c **** /* USER CODE BEGIN Includes */
+  25:Core/Src/command_processor.c **** #include <string.h>
+  26:Core/Src/command_processor.c **** #include <stdio.h>
+  27:Core/Src/command_processor.c **** #include "code_storage.h"
+  28:Core/Src/command_processor.c **** /* USER CODE END Includes */
+  29:Core/Src/command_processor.c **** 
+  30:Core/Src/command_processor.c **** /* Private typedef -----------------------------------------------------------*/
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 2
+
+
+  31:Core/Src/command_processor.c **** /* USER CODE BEGIN PTD */
+  32:Core/Src/command_processor.c **** 
+  33:Core/Src/command_processor.c **** /* USER CODE END PTD */
+  34:Core/Src/command_processor.c **** 
+  35:Core/Src/command_processor.c **** /* Private define ------------------------------------------------------------*/
+  36:Core/Src/command_processor.c **** /* USER CODE BEGIN PD */
+  37:Core/Src/command_processor.c **** 
+  38:Core/Src/command_processor.c **** /* USER CODE END PD */
+  39:Core/Src/command_processor.c **** 
+  40:Core/Src/command_processor.c **** /* Private macro -------------------------------------------------------------*/
+  41:Core/Src/command_processor.c **** /* USER CODE BEGIN PM */
+  42:Core/Src/command_processor.c **** 
+  43:Core/Src/command_processor.c **** /* USER CODE END PM */
+  44:Core/Src/command_processor.c **** 
+  45:Core/Src/command_processor.c **** /* Private variables ---------------------------------------------------------*/
+  46:Core/Src/command_processor.c **** /* USER CODE BEGIN PV */
+  47:Core/Src/command_processor.c **** uint8_t connection_status = 0;
+  48:Core/Src/command_processor.c **** 
+  49:Core/Src/command_processor.c **** /* USER CODE END PV */
+  50:Core/Src/command_processor.c **** 
+  51:Core/Src/command_processor.c **** /* Private function prototypes -----------------------------------------------*/
+  52:Core/Src/command_processor.c **** /* USER CODE BEGIN PFP */
+  53:Core/Src/command_processor.c **** 
+  54:Core/Src/command_processor.c **** /* USER CODE END PFP */
+  55:Core/Src/command_processor.c **** 
+  56:Core/Src/command_processor.c **** /* Private user code ---------------------------------------------------------*/
+  57:Core/Src/command_processor.c **** /* USER CODE BEGIN 0 */
+  58:Core/Src/command_processor.c **** 
+  59:Core/Src/command_processor.c **** /* USER CODE END 0 */
+  60:Core/Src/command_processor.c **** 
+  61:Core/Src/command_processor.c **** /**
+  62:Core/Src/command_processor.c ****   * @brief  Initialize command processor
+  63:Core/Src/command_processor.c ****   * @retval None
+  64:Core/Src/command_processor.c ****   */
+  65:Core/Src/command_processor.c **** void CommandProcessor_Init(void)
+  66:Core/Src/command_processor.c **** {
+  29              		.loc 1 66 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  67:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_Init */
+  68:Core/Src/command_processor.c ****     // Initialize code storage system
+  69:Core/Src/command_processor.c ****     CodeStorage_Init();
+  38              		.loc 1 69 5 view .LVU1
+  39 0002 FFF7FEFF 		bl	CodeStorage_Init
+  40              	.LVL0:
+  70:Core/Src/command_processor.c ****     connection_status = 0;
+  41              		.loc 1 70 5 view .LVU2
+  42              		.loc 1 70 23 is_stmt 0 view .LVU3
+  43 0006 024B     		ldr	r3, .L3
+  44 0008 0022     		movs	r2, #0
+  45 000a 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 3
+
+
+  71:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_Init */
+  72:Core/Src/command_processor.c **** }
+  46              		.loc 1 72 1 view .LVU4
+  47 000c 08BD     		pop	{r3, pc}
+  48              	.L4:
+  49 000e 00BF     		.align	2
+  50              	.L3:
+  51 0010 00000000 		.word	connection_status
+  52              		.cfi_endproc
+  53              	.LFE137:
+  55              		.section	.rodata.CommandProcessor_SendResponse.str1.4,"aMS",%progbits,1
+  56              		.align	2
+  57              	.LC0:
+  58 0000 4F4B00   		.ascii	"OK\000"
+  59 0003 00       		.align	2
+  60              	.LC1:
+  61 0004 25733A25 		.ascii	"%s:%s\015\012\000"
+  61      730D0A00 
+  62              		.align	2
+  63              	.LC2:
+  64 000c 25730D0A 		.ascii	"%s\015\012\000"
+  64      00
+  65 0011 000000   		.align	2
+  66              	.LC3:
+  67 0014 4552524F 		.ascii	"ERROR\000"
+  67      5200
+  68 001a 0000     		.align	2
+  69              	.LC4:
+  70 001c 4552524F 		.ascii	"ERROR:NOT_SET\000"
+  70      523A4E4F 
+  70      545F5345 
+  70      5400
+  71 002a 0000     		.align	2
+  72              	.LC5:
+  73 002c 4552524F 		.ascii	"ERROR:INVALID_CMD\000"
+  73      523A494E 
+  73      56414C49 
+  73      445F434D 
+  73      4400
+  74 003e 0000     		.align	2
+  75              	.LC6:
+  76 0040 4552524F 		.ascii	"ERROR:INVALID_PARAM\000"
+  76      523A494E 
+  76      56414C49 
+  76      445F5041 
+  76      52414D00 
+  77              		.section	.text.CommandProcessor_SendResponse,"ax",%progbits
+  78              		.align	1
+  79              		.global	CommandProcessor_SendResponse
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  84              	CommandProcessor_SendResponse:
+  85              	.LVL1:
+  86              	.LFB139:
+  73:Core/Src/command_processor.c **** 
+  74:Core/Src/command_processor.c **** /**
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 4
+
+
+  75:Core/Src/command_processor.c ****   * @brief  Process incoming command
+  76:Core/Src/command_processor.c ****   * @param  command: Command string to process
+  77:Core/Src/command_processor.c ****   * @retval None
+  78:Core/Src/command_processor.c ****   */
+  79:Core/Src/command_processor.c **** void CommandProcessor_ProcessCommand(char* command)
+  80:Core/Src/command_processor.c **** {
+  81:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_ProcessCommand */
+  82:Core/Src/command_processor.c ****     command_type_t cmd_type = CommandProcessor_ParseCommand(command);
+  83:Core/Src/command_processor.c ****     
+  84:Core/Src/command_processor.c ****     switch (cmd_type)
+  85:Core/Src/command_processor.c ****     {
+  86:Core/Src/command_processor.c ****         case CMD_CONNECT:
+  87:Core/Src/command_processor.c ****             CommandProcessor_HandleConnect();
+  88:Core/Src/command_processor.c ****             break;
+  89:Core/Src/command_processor.c ****             
+  90:Core/Src/command_processor.c ****         case CMD_GET_CODE_1:
+  91:Core/Src/command_processor.c ****             CommandProcessor_HandleGetCode(0);
+  92:Core/Src/command_processor.c ****             break;
+  93:Core/Src/command_processor.c ****             
+  94:Core/Src/command_processor.c ****         case CMD_GET_CODE_2:
+  95:Core/Src/command_processor.c ****             CommandProcessor_HandleGetCode(1);
+  96:Core/Src/command_processor.c ****             break;
+  97:Core/Src/command_processor.c ****             
+  98:Core/Src/command_processor.c ****         case CMD_GET_CODE_3:
+  99:Core/Src/command_processor.c ****             CommandProcessor_HandleGetCode(2);
+ 100:Core/Src/command_processor.c ****             break;
+ 101:Core/Src/command_processor.c ****             
+ 102:Core/Src/command_processor.c ****         case CMD_SET_CODE_1:
+ 103:Core/Src/command_processor.c ****             {
+ 104:Core/Src/command_processor.c ****                 char* param = CommandProcessor_ExtractParameter(command);
+ 105:Core/Src/command_processor.c ****                 if (param != NULL)
+ 106:Core/Src/command_processor.c ****                 {
+ 107:Core/Src/command_processor.c ****                     CommandProcessor_HandleSetCode(0, param);
+ 108:Core/Src/command_processor.c ****                 }
+ 109:Core/Src/command_processor.c ****                 else
+ 110:Core/Src/command_processor.c ****                 {
+ 111:Core/Src/command_processor.c ****                     CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 112:Core/Src/command_processor.c ****                 }
+ 113:Core/Src/command_processor.c ****             }
+ 114:Core/Src/command_processor.c ****             break;
+ 115:Core/Src/command_processor.c ****             
+ 116:Core/Src/command_processor.c ****         case CMD_SET_CODE_2:
+ 117:Core/Src/command_processor.c ****             {
+ 118:Core/Src/command_processor.c ****                 char* param = CommandProcessor_ExtractParameter(command);
+ 119:Core/Src/command_processor.c ****                 if (param != NULL)
+ 120:Core/Src/command_processor.c ****                 {
+ 121:Core/Src/command_processor.c ****                     CommandProcessor_HandleSetCode(1, param);
+ 122:Core/Src/command_processor.c ****                 }
+ 123:Core/Src/command_processor.c ****                 else
+ 124:Core/Src/command_processor.c ****                 {
+ 125:Core/Src/command_processor.c ****                     CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 126:Core/Src/command_processor.c ****                 }
+ 127:Core/Src/command_processor.c ****             }
+ 128:Core/Src/command_processor.c ****             break;
+ 129:Core/Src/command_processor.c ****             
+ 130:Core/Src/command_processor.c ****         case CMD_SET_CODE_3:
+ 131:Core/Src/command_processor.c ****             {
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 5
+
+
+ 132:Core/Src/command_processor.c ****                 char* param = CommandProcessor_ExtractParameter(command);
+ 133:Core/Src/command_processor.c ****                 if (param != NULL)
+ 134:Core/Src/command_processor.c ****                 {
+ 135:Core/Src/command_processor.c ****                     CommandProcessor_HandleSetCode(2, param);
+ 136:Core/Src/command_processor.c ****                 }
+ 137:Core/Src/command_processor.c ****                 else
+ 138:Core/Src/command_processor.c ****                 {
+ 139:Core/Src/command_processor.c ****                     CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 140:Core/Src/command_processor.c ****                 }
+ 141:Core/Src/command_processor.c ****             }
+ 142:Core/Src/command_processor.c ****             break;
+ 143:Core/Src/command_processor.c ****             
+ 144:Core/Src/command_processor.c ****         case CMD_DISCONNECT:
+ 145:Core/Src/command_processor.c ****             CommandProcessor_HandleDisconnect();
+ 146:Core/Src/command_processor.c ****             break;
+ 147:Core/Src/command_processor.c ****             
+ 148:Core/Src/command_processor.c ****         case CMD_UNKNOWN:
+ 149:Core/Src/command_processor.c ****         default:
+ 150:Core/Src/command_processor.c ****             CommandProcessor_SendResponse(RESP_ERROR_INVALID_CMD, NULL);
+ 151:Core/Src/command_processor.c ****             break;
+ 152:Core/Src/command_processor.c ****     }
+ 153:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_ProcessCommand */
+ 154:Core/Src/command_processor.c **** }
+ 155:Core/Src/command_processor.c **** 
+ 156:Core/Src/command_processor.c **** /**
+ 157:Core/Src/command_processor.c ****   * @brief  Send response via UART
+ 158:Core/Src/command_processor.c ****   * @param  response: Response type
+ 159:Core/Src/command_processor.c ****   * @param  data: Additional data (can be NULL)
+ 160:Core/Src/command_processor.c ****   * @retval None
+ 161:Core/Src/command_processor.c ****   */
+ 162:Core/Src/command_processor.c **** void CommandProcessor_SendResponse(response_type_t response, char* data)
+ 163:Core/Src/command_processor.c **** {
+  87              		.loc 1 163 1 is_stmt 1 view -0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 128
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              		.loc 1 163 1 is_stmt 0 view .LVU6
+  92 0000 00B5     		push	{lr}
+  93              	.LCFI1:
+  94              		.cfi_def_cfa_offset 4
+  95              		.cfi_offset 14, -4
+  96 0002 A3B0     		sub	sp, sp, #140
+  97              	.LCFI2:
+  98              		.cfi_def_cfa_offset 144
+ 164:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_SendResponse */
+ 165:Core/Src/command_processor.c ****     char response_buffer[MAX_RESPONSE_LENGTH];
+  99              		.loc 1 165 5 is_stmt 1 view .LVU7
+ 166:Core/Src/command_processor.c ****     
+ 167:Core/Src/command_processor.c ****     switch (response)
+ 100              		.loc 1 167 5 view .LVU8
+ 101 0004 0428     		cmp	r0, #4
+ 102 0006 35D8     		bhi	.L6
+ 103 0008 DFE800F0 		tbb	[pc, r0]
+ 104              	.L8:
+ 105 000c 03       		.byte	(.L12-.L8)/2
+ 106 000d 13       		.byte	(.L11-.L8)/2
+ 107 000e 1F       		.byte	(.L10-.L8)/2
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 6
+
+
+ 108 000f 26       		.byte	(.L9-.L8)/2
+ 109 0010 2D       		.byte	(.L7-.L8)/2
+ 110 0011 00       		.p2align 1
+ 111              	.L12:
+ 168:Core/Src/command_processor.c ****     {
+ 169:Core/Src/command_processor.c ****         case RESP_OK:
+ 170:Core/Src/command_processor.c ****             if (data != NULL)
+ 112              		.loc 1 170 13 view .LVU9
+ 113              		.loc 1 170 16 is_stmt 0 view .LVU10
+ 114 0012 39B1     		cbz	r1, .L13
+ 171:Core/Src/command_processor.c ****             {
+ 172:Core/Src/command_processor.c ****                 snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s:%s\r\n", RESP_OK_STR, data);
+ 115              		.loc 1 172 17 is_stmt 1 view .LVU11
+ 116 0014 0091     		str	r1, [sp]
+ 117 0016 1B4B     		ldr	r3, .L16
+ 118 0018 1B4A     		ldr	r2, .L16+4
+ 119 001a 8021     		movs	r1, #128
+ 120              	.LVL2:
+ 121              		.loc 1 172 17 is_stmt 0 view .LVU12
+ 122 001c 02A8     		add	r0, sp, #8
+ 123              	.LVL3:
+ 124              		.loc 1 172 17 view .LVU13
+ 125 001e FFF7FEFF 		bl	snprintf
+ 126              	.LVL4:
+ 127              		.loc 1 172 17 view .LVU14
+ 128 0022 0CE0     		b	.L14
+ 129              	.LVL5:
+ 130              	.L13:
+ 173:Core/Src/command_processor.c ****             }
+ 174:Core/Src/command_processor.c ****             else
+ 175:Core/Src/command_processor.c ****             {
+ 176:Core/Src/command_processor.c ****                 snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_OK_STR);
+ 131              		.loc 1 176 17 is_stmt 1 view .LVU15
+ 132 0024 174B     		ldr	r3, .L16
+ 133 0026 194A     		ldr	r2, .L16+8
+ 134 0028 8021     		movs	r1, #128
+ 135              	.LVL6:
+ 136              		.loc 1 176 17 is_stmt 0 view .LVU16
+ 137 002a 02A8     		add	r0, sp, #8
+ 138              	.LVL7:
+ 139              		.loc 1 176 17 view .LVU17
+ 140 002c FFF7FEFF 		bl	snprintf
+ 141              	.LVL8:
+ 142 0030 05E0     		b	.L14
+ 143              	.LVL9:
+ 144              	.L11:
+ 177:Core/Src/command_processor.c ****             }
+ 178:Core/Src/command_processor.c ****             break;
+ 179:Core/Src/command_processor.c ****             
+ 180:Core/Src/command_processor.c ****         case RESP_ERROR:
+ 181:Core/Src/command_processor.c ****             snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_ERROR_STR);
+ 145              		.loc 1 181 13 is_stmt 1 view .LVU18
+ 146 0032 174B     		ldr	r3, .L16+12
+ 147 0034 154A     		ldr	r2, .L16+8
+ 148 0036 8021     		movs	r1, #128
+ 149              	.LVL10:
+ 150              		.loc 1 181 13 is_stmt 0 view .LVU19
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 7
+
+
+ 151 0038 02A8     		add	r0, sp, #8
+ 152              	.LVL11:
+ 153              		.loc 1 181 13 view .LVU20
+ 154 003a FFF7FEFF 		bl	snprintf
+ 155              	.LVL12:
+ 182:Core/Src/command_processor.c ****             break;
+ 156              		.loc 1 182 13 is_stmt 1 view .LVU21
+ 157              	.L14:
+ 183:Core/Src/command_processor.c ****             
+ 184:Core/Src/command_processor.c ****         case RESP_ERROR_NOT_SET:
+ 185:Core/Src/command_processor.c ****             snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_ERROR_NOT_SET_STR);
+ 186:Core/Src/command_processor.c ****             break;
+ 187:Core/Src/command_processor.c ****             
+ 188:Core/Src/command_processor.c ****         case RESP_ERROR_INVALID_CMD:
+ 189:Core/Src/command_processor.c ****             snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_ERROR_INVALID_CMD_STR);
+ 190:Core/Src/command_processor.c ****             break;
+ 191:Core/Src/command_processor.c ****             
+ 192:Core/Src/command_processor.c ****         case RESP_ERROR_INVALID_PARAM:
+ 193:Core/Src/command_processor.c ****             snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_ERROR_INVALID_PARAM_STR);
+ 194:Core/Src/command_processor.c ****             break;
+ 195:Core/Src/command_processor.c ****             
+ 196:Core/Src/command_processor.c ****         default:
+ 197:Core/Src/command_processor.c ****             snprintf(response_buffer, MAX_RESPONSE_LENGTH, "%s\r\n", RESP_ERROR_STR);
+ 198:Core/Src/command_processor.c ****             break;
+ 199:Core/Src/command_processor.c ****     }
+ 200:Core/Src/command_processor.c ****     
+ 201:Core/Src/command_processor.c ****     UART_SendString(response_buffer);
+ 158              		.loc 1 201 5 view .LVU22
+ 159 003e 02A8     		add	r0, sp, #8
+ 160 0040 FFF7FEFF 		bl	UART_SendString
+ 161              	.LVL13:
+ 202:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_SendResponse */
+ 203:Core/Src/command_processor.c **** }
+ 162              		.loc 1 203 1 is_stmt 0 view .LVU23
+ 163 0044 23B0     		add	sp, sp, #140
+ 164              	.LCFI3:
+ 165              		.cfi_remember_state
+ 166              		.cfi_def_cfa_offset 4
+ 167              		@ sp needed
+ 168 0046 5DF804FB 		ldr	pc, [sp], #4
+ 169              	.LVL14:
+ 170              	.L10:
+ 171              	.LCFI4:
+ 172              		.cfi_restore_state
+ 185:Core/Src/command_processor.c ****             break;
+ 173              		.loc 1 185 13 is_stmt 1 view .LVU24
+ 174 004a 124B     		ldr	r3, .L16+16
+ 175 004c 0F4A     		ldr	r2, .L16+8
+ 176 004e 8021     		movs	r1, #128
+ 177              	.LVL15:
+ 185:Core/Src/command_processor.c ****             break;
+ 178              		.loc 1 185 13 is_stmt 0 view .LVU25
+ 179 0050 02A8     		add	r0, sp, #8
+ 180              	.LVL16:
+ 185:Core/Src/command_processor.c ****             break;
+ 181              		.loc 1 185 13 view .LVU26
+ 182 0052 FFF7FEFF 		bl	snprintf
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 8
+
+
+ 183              	.LVL17:
+ 186:Core/Src/command_processor.c ****             
+ 184              		.loc 1 186 13 is_stmt 1 view .LVU27
+ 185 0056 F2E7     		b	.L14
+ 186              	.LVL18:
+ 187              	.L9:
+ 189:Core/Src/command_processor.c ****             break;
+ 188              		.loc 1 189 13 view .LVU28
+ 189 0058 0F4B     		ldr	r3, .L16+20
+ 190 005a 0C4A     		ldr	r2, .L16+8
+ 191 005c 8021     		movs	r1, #128
+ 192              	.LVL19:
+ 189:Core/Src/command_processor.c ****             break;
+ 193              		.loc 1 189 13 is_stmt 0 view .LVU29
+ 194 005e 02A8     		add	r0, sp, #8
+ 195              	.LVL20:
+ 189:Core/Src/command_processor.c ****             break;
+ 196              		.loc 1 189 13 view .LVU30
+ 197 0060 FFF7FEFF 		bl	snprintf
+ 198              	.LVL21:
+ 190:Core/Src/command_processor.c ****             
+ 199              		.loc 1 190 13 is_stmt 1 view .LVU31
+ 200 0064 EBE7     		b	.L14
+ 201              	.LVL22:
+ 202              	.L7:
+ 193:Core/Src/command_processor.c ****             break;
+ 203              		.loc 1 193 13 view .LVU32
+ 204 0066 0D4B     		ldr	r3, .L16+24
+ 205 0068 084A     		ldr	r2, .L16+8
+ 206 006a 8021     		movs	r1, #128
+ 207              	.LVL23:
+ 193:Core/Src/command_processor.c ****             break;
+ 208              		.loc 1 193 13 is_stmt 0 view .LVU33
+ 209 006c 02A8     		add	r0, sp, #8
+ 210              	.LVL24:
+ 193:Core/Src/command_processor.c ****             break;
+ 211              		.loc 1 193 13 view .LVU34
+ 212 006e FFF7FEFF 		bl	snprintf
+ 213              	.LVL25:
+ 194:Core/Src/command_processor.c ****             
+ 214              		.loc 1 194 13 is_stmt 1 view .LVU35
+ 215 0072 E4E7     		b	.L14
+ 216              	.LVL26:
+ 217              	.L6:
+ 197:Core/Src/command_processor.c ****             break;
+ 218              		.loc 1 197 13 view .LVU36
+ 219 0074 064B     		ldr	r3, .L16+12
+ 220 0076 054A     		ldr	r2, .L16+8
+ 221 0078 8021     		movs	r1, #128
+ 222              	.LVL27:
+ 197:Core/Src/command_processor.c ****             break;
+ 223              		.loc 1 197 13 is_stmt 0 view .LVU37
+ 224 007a 02A8     		add	r0, sp, #8
+ 225              	.LVL28:
+ 197:Core/Src/command_processor.c ****             break;
+ 226              		.loc 1 197 13 view .LVU38
+ 227 007c FFF7FEFF 		bl	snprintf
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 9
+
+
+ 228              	.LVL29:
+ 198:Core/Src/command_processor.c ****     }
+ 229              		.loc 1 198 13 is_stmt 1 view .LVU39
+ 230 0080 DDE7     		b	.L14
+ 231              	.L17:
+ 232 0082 00BF     		.align	2
+ 233              	.L16:
+ 234 0084 00000000 		.word	.LC0
+ 235 0088 04000000 		.word	.LC1
+ 236 008c 0C000000 		.word	.LC2
+ 237 0090 14000000 		.word	.LC3
+ 238 0094 1C000000 		.word	.LC4
+ 239 0098 2C000000 		.word	.LC5
+ 240 009c 40000000 		.word	.LC6
+ 241              		.cfi_endproc
+ 242              	.LFE139:
+ 244              		.section	.rodata.CommandProcessor_ParseCommand.str1.4,"aMS",%progbits,1
+ 245              		.align	2
+ 246              	.LC7:
+ 247 0000 434F4E4E 		.ascii	"CONNECT\000"
+ 247      45435400 
+ 248              		.align	2
+ 249              	.LC8:
+ 250 0008 4745545F 		.ascii	"GET_CODE_1\000"
+ 250      434F4445 
+ 250      5F3100
+ 251 0013 00       		.align	2
+ 252              	.LC9:
+ 253 0014 4745545F 		.ascii	"GET_CODE_2\000"
+ 253      434F4445 
+ 253      5F3200
+ 254 001f 00       		.align	2
+ 255              	.LC10:
+ 256 0020 4745545F 		.ascii	"GET_CODE_3\000"
+ 256      434F4445 
+ 256      5F3300
+ 257 002b 00       		.align	2
+ 258              	.LC11:
+ 259 002c 5345545F 		.ascii	"SET_CODE_1\000"
+ 259      434F4445 
+ 259      5F3100
+ 260 0037 00       		.align	2
+ 261              	.LC12:
+ 262 0038 5345545F 		.ascii	"SET_CODE_2\000"
+ 262      434F4445 
+ 262      5F3200
+ 263 0043 00       		.align	2
+ 264              	.LC13:
+ 265 0044 5345545F 		.ascii	"SET_CODE_3\000"
+ 265      434F4445 
+ 265      5F3300
+ 266 004f 00       		.align	2
+ 267              	.LC14:
+ 268 0050 44495343 		.ascii	"DISCONNECT\000"
+ 268      4F4E4E45 
+ 268      435400
+ 269              		.section	.text.CommandProcessor_ParseCommand,"ax",%progbits
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 10
+
+
+ 270              		.align	1
+ 271              		.global	CommandProcessor_ParseCommand
+ 272              		.syntax unified
+ 273              		.thumb
+ 274              		.thumb_func
+ 276              	CommandProcessor_ParseCommand:
+ 277              	.LVL30:
+ 278              	.LFB140:
+ 204:Core/Src/command_processor.c **** 
+ 205:Core/Src/command_processor.c **** /**
+ 206:Core/Src/command_processor.c ****   * @brief  Parse command string to determine command type
+ 207:Core/Src/command_processor.c ****   * @param  command: Command string
+ 208:Core/Src/command_processor.c ****   * @retval Command type
+ 209:Core/Src/command_processor.c ****   */
+ 210:Core/Src/command_processor.c **** command_type_t CommandProcessor_ParseCommand(char* command)
+ 211:Core/Src/command_processor.c **** {
+ 279              		.loc 1 211 1 view -0
+ 280              		.cfi_startproc
+ 281              		@ args = 0, pretend = 0, frame = 0
+ 282              		@ frame_needed = 0, uses_anonymous_args = 0
+ 283              		.loc 1 211 1 is_stmt 0 view .LVU41
+ 284 0000 10B5     		push	{r4, lr}
+ 285              	.LCFI5:
+ 286              		.cfi_def_cfa_offset 8
+ 287              		.cfi_offset 4, -8
+ 288              		.cfi_offset 14, -4
+ 289 0002 0446     		mov	r4, r0
+ 212:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_ParseCommand */
+ 213:Core/Src/command_processor.c ****     if (strncmp(command, CMD_CONNECT_STR, strlen(CMD_CONNECT_STR)) == 0)
+ 290              		.loc 1 213 5 is_stmt 1 view .LVU42
+ 291              		.loc 1 213 9 is_stmt 0 view .LVU43
+ 292 0004 0722     		movs	r2, #7
+ 293 0006 2049     		ldr	r1, .L29
+ 294 0008 FFF7FEFF 		bl	strncmp
+ 295              	.LVL31:
+ 296              		.loc 1 213 8 discriminator 1 view .LVU44
+ 297 000c 58B3     		cbz	r0, .L20
+ 214:Core/Src/command_processor.c ****         return CMD_CONNECT;
+ 215:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_1_STR, strlen(CMD_GET_CODE_1_STR)) == 0)
+ 298              		.loc 1 215 10 is_stmt 1 view .LVU45
+ 299              		.loc 1 215 14 is_stmt 0 view .LVU46
+ 300 000e 0A22     		movs	r2, #10
+ 301 0010 1E49     		ldr	r1, .L29+4
+ 302 0012 2046     		mov	r0, r4
+ 303 0014 FFF7FEFF 		bl	strncmp
+ 304              	.LVL32:
+ 305              		.loc 1 215 13 discriminator 1 view .LVU47
+ 306 0018 38B3     		cbz	r0, .L21
+ 216:Core/Src/command_processor.c ****         return CMD_GET_CODE_1;
+ 217:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_2_STR, strlen(CMD_GET_CODE_2_STR)) == 0)
+ 307              		.loc 1 217 10 is_stmt 1 view .LVU48
+ 308              		.loc 1 217 14 is_stmt 0 view .LVU49
+ 309 001a 0A22     		movs	r2, #10
+ 310 001c 1C49     		ldr	r1, .L29+8
+ 311 001e 2046     		mov	r0, r4
+ 312 0020 FFF7FEFF 		bl	strncmp
+ 313              	.LVL33:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 11
+
+
+ 314              		.loc 1 217 13 discriminator 1 view .LVU50
+ 315 0024 18B3     		cbz	r0, .L22
+ 218:Core/Src/command_processor.c ****         return CMD_GET_CODE_2;
+ 219:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_3_STR, strlen(CMD_GET_CODE_3_STR)) == 0)
+ 316              		.loc 1 219 10 is_stmt 1 view .LVU51
+ 317              		.loc 1 219 14 is_stmt 0 view .LVU52
+ 318 0026 0A22     		movs	r2, #10
+ 319 0028 1A49     		ldr	r1, .L29+12
+ 320 002a 2046     		mov	r0, r4
+ 321 002c FFF7FEFF 		bl	strncmp
+ 322              	.LVL34:
+ 323              		.loc 1 219 13 discriminator 1 view .LVU53
+ 324 0030 F8B1     		cbz	r0, .L23
+ 220:Core/Src/command_processor.c ****         return CMD_GET_CODE_3;
+ 221:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_1_STR, strlen(CMD_SET_CODE_1_STR)) == 0)
+ 325              		.loc 1 221 10 is_stmt 1 view .LVU54
+ 326              		.loc 1 221 14 is_stmt 0 view .LVU55
+ 327 0032 0A22     		movs	r2, #10
+ 328 0034 1849     		ldr	r1, .L29+16
+ 329 0036 2046     		mov	r0, r4
+ 330 0038 FFF7FEFF 		bl	strncmp
+ 331              	.LVL35:
+ 332              		.loc 1 221 13 discriminator 1 view .LVU56
+ 333 003c D8B1     		cbz	r0, .L24
+ 222:Core/Src/command_processor.c ****         return CMD_SET_CODE_1;
+ 223:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_2_STR, strlen(CMD_SET_CODE_2_STR)) == 0)
+ 334              		.loc 1 223 10 is_stmt 1 view .LVU57
+ 335              		.loc 1 223 14 is_stmt 0 view .LVU58
+ 336 003e 0A22     		movs	r2, #10
+ 337 0040 1649     		ldr	r1, .L29+20
+ 338 0042 2046     		mov	r0, r4
+ 339 0044 FFF7FEFF 		bl	strncmp
+ 340              	.LVL36:
+ 341              		.loc 1 223 13 discriminator 1 view .LVU59
+ 342 0048 B8B1     		cbz	r0, .L25
+ 224:Core/Src/command_processor.c ****         return CMD_SET_CODE_2;
+ 225:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_3_STR, strlen(CMD_SET_CODE_3_STR)) == 0)
+ 343              		.loc 1 225 10 is_stmt 1 view .LVU60
+ 344              		.loc 1 225 14 is_stmt 0 view .LVU61
+ 345 004a 0A22     		movs	r2, #10
+ 346 004c 1449     		ldr	r1, .L29+24
+ 347 004e 2046     		mov	r0, r4
+ 348 0050 FFF7FEFF 		bl	strncmp
+ 349              	.LVL37:
+ 350              		.loc 1 225 13 discriminator 1 view .LVU62
+ 351 0054 98B1     		cbz	r0, .L26
+ 226:Core/Src/command_processor.c ****         return CMD_SET_CODE_3;
+ 227:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_DISCONNECT_STR, strlen(CMD_DISCONNECT_STR)) == 0)
+ 352              		.loc 1 227 10 is_stmt 1 view .LVU63
+ 353              		.loc 1 227 14 is_stmt 0 view .LVU64
+ 354 0056 0A22     		movs	r2, #10
+ 355 0058 1249     		ldr	r1, .L29+28
+ 356 005a 2046     		mov	r0, r4
+ 357 005c FFF7FEFF 		bl	strncmp
+ 358              	.LVL38:
+ 359              		.loc 1 227 13 discriminator 1 view .LVU65
+ 360 0060 78B9     		cbnz	r0, .L27
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 12
+
+
+ 228:Core/Src/command_processor.c ****         return CMD_DISCONNECT;
+ 361              		.loc 1 228 16 view .LVU66
+ 362 0062 0720     		movs	r0, #7
+ 363 0064 00E0     		b	.L19
+ 364              	.L20:
+ 214:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_1_STR, strlen(CMD_GET_CODE_1_STR)) == 0)
+ 365              		.loc 1 214 16 view .LVU67
+ 366 0066 0020     		movs	r0, #0
+ 367              	.L19:
+ 229:Core/Src/command_processor.c ****     else
+ 230:Core/Src/command_processor.c ****         return CMD_UNKNOWN;
+ 231:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_ParseCommand */
+ 232:Core/Src/command_processor.c **** }
+ 368              		.loc 1 232 1 view .LVU68
+ 369 0068 10BD     		pop	{r4, pc}
+ 370              	.LVL39:
+ 371              	.L21:
+ 216:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_2_STR, strlen(CMD_GET_CODE_2_STR)) == 0)
+ 372              		.loc 1 216 16 view .LVU69
+ 373 006a 0120     		movs	r0, #1
+ 374 006c FCE7     		b	.L19
+ 375              	.L22:
+ 218:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_GET_CODE_3_STR, strlen(CMD_GET_CODE_3_STR)) == 0)
+ 376              		.loc 1 218 16 view .LVU70
+ 377 006e 0220     		movs	r0, #2
+ 378 0070 FAE7     		b	.L19
+ 379              	.L23:
+ 220:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_1_STR, strlen(CMD_SET_CODE_1_STR)) == 0)
+ 380              		.loc 1 220 16 view .LVU71
+ 381 0072 0320     		movs	r0, #3
+ 382 0074 F8E7     		b	.L19
+ 383              	.L24:
+ 222:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_2_STR, strlen(CMD_SET_CODE_2_STR)) == 0)
+ 384              		.loc 1 222 16 view .LVU72
+ 385 0076 0420     		movs	r0, #4
+ 386 0078 F6E7     		b	.L19
+ 387              	.L25:
+ 224:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_SET_CODE_3_STR, strlen(CMD_SET_CODE_3_STR)) == 0)
+ 388              		.loc 1 224 16 view .LVU73
+ 389 007a 0520     		movs	r0, #5
+ 390 007c F4E7     		b	.L19
+ 391              	.L26:
+ 226:Core/Src/command_processor.c ****     else if (strncmp(command, CMD_DISCONNECT_STR, strlen(CMD_DISCONNECT_STR)) == 0)
+ 392              		.loc 1 226 16 view .LVU74
+ 393 007e 0620     		movs	r0, #6
+ 394 0080 F2E7     		b	.L19
+ 395              	.L27:
+ 230:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_ParseCommand */
+ 396              		.loc 1 230 16 view .LVU75
+ 397 0082 0820     		movs	r0, #8
+ 398 0084 F0E7     		b	.L19
+ 399              	.L30:
+ 400 0086 00BF     		.align	2
+ 401              	.L29:
+ 402 0088 00000000 		.word	.LC7
+ 403 008c 08000000 		.word	.LC8
+ 404 0090 14000000 		.word	.LC9
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 13
+
+
+ 405 0094 20000000 		.word	.LC10
+ 406 0098 2C000000 		.word	.LC11
+ 407 009c 38000000 		.word	.LC12
+ 408 00a0 44000000 		.word	.LC13
+ 409 00a4 50000000 		.word	.LC14
+ 410              		.cfi_endproc
+ 411              	.LFE140:
+ 413              		.section	.text.CommandProcessor_ExtractParameter,"ax",%progbits
+ 414              		.align	1
+ 415              		.global	CommandProcessor_ExtractParameter
+ 416              		.syntax unified
+ 417              		.thumb
+ 418              		.thumb_func
+ 420              	CommandProcessor_ExtractParameter:
+ 421              	.LVL40:
+ 422              	.LFB141:
+ 233:Core/Src/command_processor.c **** 
+ 234:Core/Src/command_processor.c **** /**
+ 235:Core/Src/command_processor.c ****   * @brief  Extract parameter from command string
+ 236:Core/Src/command_processor.c ****   * @param  command: Command string with parameter
+ 237:Core/Src/command_processor.c ****   * @retval Pointer to parameter string (NULL if no parameter)
+ 238:Core/Src/command_processor.c ****   */
+ 239:Core/Src/command_processor.c **** char* CommandProcessor_ExtractParameter(char* command)
+ 240:Core/Src/command_processor.c **** {
+ 423              		.loc 1 240 1 is_stmt 1 view -0
+ 424              		.cfi_startproc
+ 425              		@ args = 0, pretend = 0, frame = 0
+ 426              		@ frame_needed = 0, uses_anonymous_args = 0
+ 427              		.loc 1 240 1 is_stmt 0 view .LVU77
+ 428 0000 08B5     		push	{r3, lr}
+ 429              	.LCFI6:
+ 430              		.cfi_def_cfa_offset 8
+ 431              		.cfi_offset 3, -8
+ 432              		.cfi_offset 14, -4
+ 241:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_ExtractParameter */
+ 242:Core/Src/command_processor.c ****     char* colon_pos = strchr(command, ':');
+ 433              		.loc 1 242 5 is_stmt 1 view .LVU78
+ 434              		.loc 1 242 23 is_stmt 0 view .LVU79
+ 435 0002 3A21     		movs	r1, #58
+ 436 0004 FFF7FEFF 		bl	strchr
+ 437              	.LVL41:
+ 243:Core/Src/command_processor.c ****     if (colon_pos != NULL)
+ 438              		.loc 1 243 5 is_stmt 1 view .LVU80
+ 439              		.loc 1 243 8 is_stmt 0 view .LVU81
+ 440 0008 0346     		mov	r3, r0
+ 441 000a 00B1     		cbz	r0, .L31
+ 244:Core/Src/command_processor.c ****     {
+ 245:Core/Src/command_processor.c ****         return colon_pos + 1; // Return string after ':'
+ 442              		.loc 1 245 9 is_stmt 1 view .LVU82
+ 443              		.loc 1 245 26 is_stmt 0 view .LVU83
+ 444 000c 0133     		adds	r3, r3, #1
+ 445              	.L31:
+ 246:Core/Src/command_processor.c ****     }
+ 247:Core/Src/command_processor.c ****     return NULL;
+ 248:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_ExtractParameter */
+ 249:Core/Src/command_processor.c **** }
+ 446              		.loc 1 249 1 view .LVU84
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 14
+
+
+ 447 000e 1846     		mov	r0, r3
+ 448              	.LVL42:
+ 449              		.loc 1 249 1 view .LVU85
+ 450 0010 08BD     		pop	{r3, pc}
+ 451              		.cfi_endproc
+ 452              	.LFE141:
+ 454              		.section	.text.CommandProcessor_HandleConnect,"ax",%progbits
+ 455              		.align	1
+ 456              		.global	CommandProcessor_HandleConnect
+ 457              		.syntax unified
+ 458              		.thumb
+ 459              		.thumb_func
+ 461              	CommandProcessor_HandleConnect:
+ 462              	.LFB142:
+ 250:Core/Src/command_processor.c **** 
+ 251:Core/Src/command_processor.c **** /**
+ 252:Core/Src/command_processor.c ****   * @brief  Handle CONNECT command
+ 253:Core/Src/command_processor.c ****   * @retval None
+ 254:Core/Src/command_processor.c ****   */
+ 255:Core/Src/command_processor.c **** void CommandProcessor_HandleConnect(void)
+ 256:Core/Src/command_processor.c **** {
+ 463              		.loc 1 256 1 is_stmt 1 view -0
+ 464              		.cfi_startproc
+ 465              		@ args = 0, pretend = 0, frame = 0
+ 466              		@ frame_needed = 0, uses_anonymous_args = 0
+ 467 0000 08B5     		push	{r3, lr}
+ 468              	.LCFI7:
+ 469              		.cfi_def_cfa_offset 8
+ 470              		.cfi_offset 3, -8
+ 471              		.cfi_offset 14, -4
+ 257:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_HandleConnect */
+ 258:Core/Src/command_processor.c ****     connection_status = 1;
+ 472              		.loc 1 258 5 view .LVU87
+ 473              		.loc 1 258 23 is_stmt 0 view .LVU88
+ 474 0002 044B     		ldr	r3, .L36
+ 475 0004 0122     		movs	r2, #1
+ 476 0006 1A70     		strb	r2, [r3]
+ 259:Core/Src/command_processor.c ****     CommandProcessor_SendResponse(RESP_OK, NULL);
+ 477              		.loc 1 259 5 is_stmt 1 view .LVU89
+ 478 0008 0021     		movs	r1, #0
+ 479 000a 0846     		mov	r0, r1
+ 480 000c FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 481              	.LVL43:
+ 260:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_HandleConnect */
+ 261:Core/Src/command_processor.c **** }
+ 482              		.loc 1 261 1 is_stmt 0 view .LVU90
+ 483 0010 08BD     		pop	{r3, pc}
+ 484              	.L37:
+ 485 0012 00BF     		.align	2
+ 486              	.L36:
+ 487 0014 00000000 		.word	connection_status
+ 488              		.cfi_endproc
+ 489              	.LFE142:
+ 491              		.section	.text.CommandProcessor_HandleGetCode,"ax",%progbits
+ 492              		.align	1
+ 493              		.global	CommandProcessor_HandleGetCode
+ 494              		.syntax unified
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 15
+
+
+ 495              		.thumb
+ 496              		.thumb_func
+ 498              	CommandProcessor_HandleGetCode:
+ 499              	.LVL44:
+ 500              	.LFB143:
+ 262:Core/Src/command_processor.c **** 
+ 263:Core/Src/command_processor.c **** /**
+ 264:Core/Src/command_processor.c ****   * @brief  Handle GET_CODE command
+ 265:Core/Src/command_processor.c ****   * @param  codeIndex: Index of code to retrieve (0, 1, or 2)
+ 266:Core/Src/command_processor.c ****   * @retval None
+ 267:Core/Src/command_processor.c ****   */
+ 268:Core/Src/command_processor.c **** void CommandProcessor_HandleGetCode(uint8_t codeIndex)
+ 269:Core/Src/command_processor.c **** {
+ 501              		.loc 1 269 1 is_stmt 1 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 32
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 505              		.loc 1 269 1 is_stmt 0 view .LVU92
+ 506 0000 10B5     		push	{r4, lr}
+ 507              	.LCFI8:
+ 508              		.cfi_def_cfa_offset 8
+ 509              		.cfi_offset 4, -8
+ 510              		.cfi_offset 14, -4
+ 511 0002 88B0     		sub	sp, sp, #32
+ 512              	.LCFI9:
+ 513              		.cfi_def_cfa_offset 40
+ 270:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_HandleGetCode */
+ 271:Core/Src/command_processor.c ****     if (!connection_status)
+ 514              		.loc 1 271 5 is_stmt 1 view .LVU93
+ 515              		.loc 1 271 9 is_stmt 0 view .LVU94
+ 516 0004 134B     		ldr	r3, .L48
+ 517 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 518              		.loc 1 271 8 view .LVU95
+ 519 0008 53B1     		cbz	r3, .L46
+ 520 000a 0446     		mov	r4, r0
+ 272:Core/Src/command_processor.c ****     {
+ 273:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR, NULL);
+ 274:Core/Src/command_processor.c ****         return;
+ 275:Core/Src/command_processor.c ****     }
+ 276:Core/Src/command_processor.c ****     
+ 277:Core/Src/command_processor.c ****     if (codeIndex >= 3)
+ 521              		.loc 1 277 5 is_stmt 1 view .LVU96
+ 522              		.loc 1 277 8 is_stmt 0 view .LVU97
+ 523 000c 0228     		cmp	r0, #2
+ 524 000e 0CD8     		bhi	.L47
+ 278:Core/Src/command_processor.c ****     {
+ 279:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 280:Core/Src/command_processor.c ****         return;
+ 281:Core/Src/command_processor.c ****     }
+ 282:Core/Src/command_processor.c ****     
+ 283:Core/Src/command_processor.c ****     // Check if code is set using flash storage
+ 284:Core/Src/command_processor.c ****     if (!CodeStorage_IsCodeSet(codeIndex))
+ 525              		.loc 1 284 5 is_stmt 1 view .LVU98
+ 526              		.loc 1 284 10 is_stmt 0 view .LVU99
+ 527 0010 FFF7FEFF 		bl	CodeStorage_IsCodeSet
+ 528              	.LVL45:
+ 529              		.loc 1 284 8 discriminator 1 view .LVU100
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 16
+
+
+ 530 0014 78B9     		cbnz	r0, .L42
+ 285:Core/Src/command_processor.c ****     {
+ 286:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR_NOT_SET, NULL);
+ 531              		.loc 1 286 9 is_stmt 1 view .LVU101
+ 532 0016 0021     		movs	r1, #0
+ 533 0018 0220     		movs	r0, #2
+ 534 001a FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 535              	.LVL46:
+ 536 001e 08E0     		b	.L38
+ 537              	.LVL47:
+ 538              	.L46:
+ 273:Core/Src/command_processor.c ****         return;
+ 539              		.loc 1 273 9 view .LVU102
+ 540 0020 0021     		movs	r1, #0
+ 541 0022 0120     		movs	r0, #1
+ 542              	.LVL48:
+ 273:Core/Src/command_processor.c ****         return;
+ 543              		.loc 1 273 9 is_stmt 0 view .LVU103
+ 544 0024 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 545              	.LVL49:
+ 274:Core/Src/command_processor.c ****     }
+ 546              		.loc 1 274 9 is_stmt 1 view .LVU104
+ 547 0028 03E0     		b	.L38
+ 548              	.LVL50:
+ 549              	.L47:
+ 279:Core/Src/command_processor.c ****         return;
+ 550              		.loc 1 279 9 view .LVU105
+ 551 002a 0021     		movs	r1, #0
+ 552 002c 0420     		movs	r0, #4
+ 553              	.LVL51:
+ 279:Core/Src/command_processor.c ****         return;
+ 554              		.loc 1 279 9 is_stmt 0 view .LVU106
+ 555 002e FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 556              	.LVL52:
+ 280:Core/Src/command_processor.c ****     }
+ 557              		.loc 1 280 9 is_stmt 1 view .LVU107
+ 558              	.L38:
+ 287:Core/Src/command_processor.c ****     }
+ 288:Core/Src/command_processor.c ****     else
+ 289:Core/Src/command_processor.c ****     {
+ 290:Core/Src/command_processor.c ****         char code_buffer[MAX_CODE_LENGTH];
+ 291:Core/Src/command_processor.c ****         if (CodeStorage_GetCode(codeIndex, code_buffer) == 0)
+ 292:Core/Src/command_processor.c ****         {
+ 293:Core/Src/command_processor.c ****             CommandProcessor_SendResponse(RESP_OK, code_buffer);
+ 294:Core/Src/command_processor.c ****         }
+ 295:Core/Src/command_processor.c ****         else
+ 296:Core/Src/command_processor.c ****         {
+ 297:Core/Src/command_processor.c ****             CommandProcessor_SendResponse(RESP_ERROR, NULL);
+ 298:Core/Src/command_processor.c ****         }
+ 299:Core/Src/command_processor.c ****     }
+ 300:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_HandleGetCode */
+ 301:Core/Src/command_processor.c **** }
+ 559              		.loc 1 301 1 is_stmt 0 view .LVU108
+ 560 0032 08B0     		add	sp, sp, #32
+ 561              	.LCFI10:
+ 562              		.cfi_remember_state
+ 563              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 17
+
+
+ 564              		@ sp needed
+ 565 0034 10BD     		pop	{r4, pc}
+ 566              	.L42:
+ 567              	.LCFI11:
+ 568              		.cfi_restore_state
+ 569              	.LBB2:
+ 290:Core/Src/command_processor.c ****         if (CodeStorage_GetCode(codeIndex, code_buffer) == 0)
+ 570              		.loc 1 290 9 is_stmt 1 view .LVU109
+ 291:Core/Src/command_processor.c ****         {
+ 571              		.loc 1 291 9 view .LVU110
+ 291:Core/Src/command_processor.c ****         {
+ 572              		.loc 1 291 13 is_stmt 0 view .LVU111
+ 573 0036 6946     		mov	r1, sp
+ 574 0038 2046     		mov	r0, r4
+ 575 003a FFF7FEFF 		bl	CodeStorage_GetCode
+ 576              	.LVL53:
+ 291:Core/Src/command_processor.c ****         {
+ 577              		.loc 1 291 12 discriminator 1 view .LVU112
+ 578 003e 18B9     		cbnz	r0, .L43
+ 293:Core/Src/command_processor.c ****         }
+ 579              		.loc 1 293 13 is_stmt 1 view .LVU113
+ 580 0040 6946     		mov	r1, sp
+ 581 0042 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 582              	.LVL54:
+ 583 0046 F4E7     		b	.L38
+ 584              	.L43:
+ 297:Core/Src/command_processor.c ****         }
+ 585              		.loc 1 297 13 view .LVU114
+ 586 0048 0021     		movs	r1, #0
+ 587 004a 0120     		movs	r0, #1
+ 588 004c FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 589              	.LVL55:
+ 590 0050 EFE7     		b	.L38
+ 591              	.L49:
+ 592 0052 00BF     		.align	2
+ 593              	.L48:
+ 594 0054 00000000 		.word	connection_status
+ 595              	.LBE2:
+ 596              		.cfi_endproc
+ 597              	.LFE143:
+ 599              		.section	.text.CommandProcessor_HandleSetCode,"ax",%progbits
+ 600              		.align	1
+ 601              		.global	CommandProcessor_HandleSetCode
+ 602              		.syntax unified
+ 603              		.thumb
+ 604              		.thumb_func
+ 606              	CommandProcessor_HandleSetCode:
+ 607              	.LVL56:
+ 608              	.LFB144:
+ 302:Core/Src/command_processor.c **** 
+ 303:Core/Src/command_processor.c **** /**
+ 304:Core/Src/command_processor.c ****   * @brief  Handle SET_CODE command
+ 305:Core/Src/command_processor.c ****   * @param  codeIndex: Index of code to set (0, 1, or 2)
+ 306:Core/Src/command_processor.c ****   * @param  newCode: New code value
+ 307:Core/Src/command_processor.c ****   * @retval None
+ 308:Core/Src/command_processor.c ****   */
+ 309:Core/Src/command_processor.c **** void CommandProcessor_HandleSetCode(uint8_t codeIndex, char* newCode)
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 18
+
+
+ 310:Core/Src/command_processor.c **** {
+ 609              		.loc 1 310 1 view -0
+ 610              		.cfi_startproc
+ 611              		@ args = 0, pretend = 0, frame = 0
+ 612              		@ frame_needed = 0, uses_anonymous_args = 0
+ 613              		.loc 1 310 1 is_stmt 0 view .LVU116
+ 614 0000 38B5     		push	{r3, r4, r5, lr}
+ 615              	.LCFI12:
+ 616              		.cfi_def_cfa_offset 16
+ 617              		.cfi_offset 3, -16
+ 618              		.cfi_offset 4, -12
+ 619              		.cfi_offset 5, -8
+ 620              		.cfi_offset 14, -4
+ 311:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_HandleSetCode */
+ 312:Core/Src/command_processor.c ****     if (!connection_status)
+ 621              		.loc 1 312 5 is_stmt 1 view .LVU117
+ 622              		.loc 1 312 9 is_stmt 0 view .LVU118
+ 623 0002 194B     		ldr	r3, .L62
+ 624 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 625              		.loc 1 312 8 view .LVU119
+ 626 0006 ABB1     		cbz	r3, .L59
+ 627 0008 0546     		mov	r5, r0
+ 628 000a 0C46     		mov	r4, r1
+ 313:Core/Src/command_processor.c ****     {
+ 314:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR, NULL);
+ 315:Core/Src/command_processor.c ****         return;
+ 316:Core/Src/command_processor.c ****     }
+ 317:Core/Src/command_processor.c ****     
+ 318:Core/Src/command_processor.c ****     if (codeIndex >= 3)
+ 629              		.loc 1 318 5 is_stmt 1 view .LVU120
+ 630              		.loc 1 318 8 is_stmt 0 view .LVU121
+ 631 000c 0228     		cmp	r0, #2
+ 632 000e 16D8     		bhi	.L60
+ 319:Core/Src/command_processor.c ****     {
+ 320:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 321:Core/Src/command_processor.c ****         return;
+ 322:Core/Src/command_processor.c ****     }
+ 323:Core/Src/command_processor.c ****     
+ 324:Core/Src/command_processor.c ****     if (newCode == NULL || strlen(newCode) == 0)
+ 633              		.loc 1 324 5 is_stmt 1 view .LVU122
+ 634              		.loc 1 324 8 is_stmt 0 view .LVU123
+ 635 0010 D1B1     		cbz	r1, .L54
+ 636              		.loc 1 324 44 discriminator 1 view .LVU124
+ 637 0012 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 638              		.loc 1 324 25 discriminator 1 view .LVU125
+ 639 0014 C3B1     		cbz	r3, .L54
+ 325:Core/Src/command_processor.c ****     {
+ 326:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 327:Core/Src/command_processor.c ****         return;
+ 328:Core/Src/command_processor.c ****     }
+ 329:Core/Src/command_processor.c ****     
+ 330:Core/Src/command_processor.c ****     // Validate code length
+ 331:Core/Src/command_processor.c ****     if (strlen(newCode) >= MAX_CODE_LENGTH)
+ 640              		.loc 1 331 5 is_stmt 1 view .LVU126
+ 641              		.loc 1 331 9 is_stmt 0 view .LVU127
+ 642 0016 0846     		mov	r0, r1
+ 643              	.LVL57:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 19
+
+
+ 644              		.loc 1 331 9 view .LVU128
+ 645 0018 FFF7FEFF 		bl	strlen
+ 646              	.LVL58:
+ 647              		.loc 1 331 8 discriminator 1 view .LVU129
+ 648 001c 1F28     		cmp	r0, #31
+ 649 001e 18D8     		bhi	.L61
+ 332:Core/Src/command_processor.c ****     {
+ 333:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR_INVALID_PARAM, NULL);
+ 334:Core/Src/command_processor.c ****         return;
+ 335:Core/Src/command_processor.c ****     }
+ 336:Core/Src/command_processor.c ****     
+ 337:Core/Src/command_processor.c ****     // Store code using flash storage
+ 338:Core/Src/command_processor.c ****     if (CodeStorage_SetCode(codeIndex, newCode) == 0)
+ 650              		.loc 1 338 5 is_stmt 1 view .LVU130
+ 651              		.loc 1 338 9 is_stmt 0 view .LVU131
+ 652 0020 2146     		mov	r1, r4
+ 653 0022 2846     		mov	r0, r5
+ 654 0024 FFF7FEFF 		bl	CodeStorage_SetCode
+ 655              	.LVL59:
+ 656              		.loc 1 338 8 discriminator 1 view .LVU132
+ 657 0028 C0B9     		cbnz	r0, .L57
+ 339:Core/Src/command_processor.c ****     {
+ 340:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_OK, NULL);
+ 658              		.loc 1 340 9 is_stmt 1 view .LVU133
+ 659 002a 0021     		movs	r1, #0
+ 660 002c 0846     		mov	r0, r1
+ 661 002e FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 662              	.LVL60:
+ 663 0032 0DE0     		b	.L50
+ 664              	.LVL61:
+ 665              	.L59:
+ 314:Core/Src/command_processor.c ****         return;
+ 666              		.loc 1 314 9 view .LVU134
+ 667 0034 0021     		movs	r1, #0
+ 668              	.LVL62:
+ 314:Core/Src/command_processor.c ****         return;
+ 669              		.loc 1 314 9 is_stmt 0 view .LVU135
+ 670 0036 0120     		movs	r0, #1
+ 671              	.LVL63:
+ 314:Core/Src/command_processor.c ****         return;
+ 672              		.loc 1 314 9 view .LVU136
+ 673 0038 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 674              	.LVL64:
+ 315:Core/Src/command_processor.c ****     }
+ 675              		.loc 1 315 9 is_stmt 1 view .LVU137
+ 676 003c 08E0     		b	.L50
+ 677              	.LVL65:
+ 678              	.L60:
+ 320:Core/Src/command_processor.c ****         return;
+ 679              		.loc 1 320 9 view .LVU138
+ 680 003e 0021     		movs	r1, #0
+ 681              	.LVL66:
+ 320:Core/Src/command_processor.c ****         return;
+ 682              		.loc 1 320 9 is_stmt 0 view .LVU139
+ 683 0040 0420     		movs	r0, #4
+ 684              	.LVL67:
+ 320:Core/Src/command_processor.c ****         return;
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 20
+
+
+ 685              		.loc 1 320 9 view .LVU140
+ 686 0042 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 687              	.LVL68:
+ 321:Core/Src/command_processor.c ****     }
+ 688              		.loc 1 321 9 is_stmt 1 view .LVU141
+ 689 0046 03E0     		b	.L50
+ 690              	.LVL69:
+ 691              	.L54:
+ 326:Core/Src/command_processor.c ****         return;
+ 692              		.loc 1 326 9 view .LVU142
+ 693 0048 0021     		movs	r1, #0
+ 694              	.LVL70:
+ 326:Core/Src/command_processor.c ****         return;
+ 695              		.loc 1 326 9 is_stmt 0 view .LVU143
+ 696 004a 0420     		movs	r0, #4
+ 697              	.LVL71:
+ 326:Core/Src/command_processor.c ****         return;
+ 698              		.loc 1 326 9 view .LVU144
+ 699 004c FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 700              	.LVL72:
+ 327:Core/Src/command_processor.c ****     }
+ 701              		.loc 1 327 9 is_stmt 1 view .LVU145
+ 702              	.L50:
+ 341:Core/Src/command_processor.c ****     }
+ 342:Core/Src/command_processor.c ****     else
+ 343:Core/Src/command_processor.c ****     {
+ 344:Core/Src/command_processor.c ****         CommandProcessor_SendResponse(RESP_ERROR, NULL);
+ 345:Core/Src/command_processor.c ****     }
+ 346:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_HandleSetCode */
+ 347:Core/Src/command_processor.c **** }
+ 703              		.loc 1 347 1 is_stmt 0 view .LVU146
+ 704 0050 38BD     		pop	{r3, r4, r5, pc}
+ 705              	.LVL73:
+ 706              	.L61:
+ 333:Core/Src/command_processor.c ****         return;
+ 707              		.loc 1 333 9 is_stmt 1 view .LVU147
+ 708 0052 0021     		movs	r1, #0
+ 709 0054 0420     		movs	r0, #4
+ 710 0056 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 711              	.LVL74:
+ 334:Core/Src/command_processor.c ****     }
+ 712              		.loc 1 334 9 view .LVU148
+ 713 005a F9E7     		b	.L50
+ 714              	.L57:
+ 344:Core/Src/command_processor.c ****     }
+ 715              		.loc 1 344 9 view .LVU149
+ 716 005c 0021     		movs	r1, #0
+ 717 005e 0120     		movs	r0, #1
+ 718 0060 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 719              	.LVL75:
+ 720 0064 F4E7     		b	.L50
+ 721              	.L63:
+ 722 0066 00BF     		.align	2
+ 723              	.L62:
+ 724 0068 00000000 		.word	connection_status
+ 725              		.cfi_endproc
+ 726              	.LFE144:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 21
+
+
+ 728              		.section	.text.CommandProcessor_HandleDisconnect,"ax",%progbits
+ 729              		.align	1
+ 730              		.global	CommandProcessor_HandleDisconnect
+ 731              		.syntax unified
+ 732              		.thumb
+ 733              		.thumb_func
+ 735              	CommandProcessor_HandleDisconnect:
+ 736              	.LFB145:
+ 348:Core/Src/command_processor.c **** 
+ 349:Core/Src/command_processor.c **** /**
+ 350:Core/Src/command_processor.c ****   * @brief  Handle DISCONNECT command
+ 351:Core/Src/command_processor.c ****   * @retval None
+ 352:Core/Src/command_processor.c ****   */
+ 353:Core/Src/command_processor.c **** void CommandProcessor_HandleDisconnect(void)
+ 354:Core/Src/command_processor.c **** {
+ 737              		.loc 1 354 1 view -0
+ 738              		.cfi_startproc
+ 739              		@ args = 0, pretend = 0, frame = 0
+ 740              		@ frame_needed = 0, uses_anonymous_args = 0
+ 741 0000 08B5     		push	{r3, lr}
+ 742              	.LCFI13:
+ 743              		.cfi_def_cfa_offset 8
+ 744              		.cfi_offset 3, -8
+ 745              		.cfi_offset 14, -4
+ 355:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_HandleDisconnect */
+ 356:Core/Src/command_processor.c ****     connection_status = 0;
+ 746              		.loc 1 356 5 view .LVU151
+ 747              		.loc 1 356 23 is_stmt 0 view .LVU152
+ 748 0002 0020     		movs	r0, #0
+ 749 0004 024B     		ldr	r3, .L66
+ 750 0006 1870     		strb	r0, [r3]
+ 357:Core/Src/command_processor.c ****     CommandProcessor_SendResponse(RESP_OK, NULL);
+ 751              		.loc 1 357 5 is_stmt 1 view .LVU153
+ 752 0008 0146     		mov	r1, r0
+ 753 000a FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 754              	.LVL76:
+ 358:Core/Src/command_processor.c ****     /* USER CODE END CommandProcessor_HandleDisconnect */
+ 359:Core/Src/command_processor.c **** }
+ 755              		.loc 1 359 1 is_stmt 0 view .LVU154
+ 756 000e 08BD     		pop	{r3, pc}
+ 757              	.L67:
+ 758              		.align	2
+ 759              	.L66:
+ 760 0010 00000000 		.word	connection_status
+ 761              		.cfi_endproc
+ 762              	.LFE145:
+ 764              		.section	.text.CommandProcessor_ProcessCommand,"ax",%progbits
+ 765              		.align	1
+ 766              		.global	CommandProcessor_ProcessCommand
+ 767              		.syntax unified
+ 768              		.thumb
+ 769              		.thumb_func
+ 771              	CommandProcessor_ProcessCommand:
+ 772              	.LVL77:
+ 773              	.LFB138:
+  80:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_ProcessCommand */
+ 774              		.loc 1 80 1 is_stmt 1 view -0
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 22
+
+
+ 775              		.cfi_startproc
+ 776              		@ args = 0, pretend = 0, frame = 0
+ 777              		@ frame_needed = 0, uses_anonymous_args = 0
+  80:Core/Src/command_processor.c ****     /* USER CODE BEGIN CommandProcessor_ProcessCommand */
+ 778              		.loc 1 80 1 is_stmt 0 view .LVU156
+ 779 0000 10B5     		push	{r4, lr}
+ 780              	.LCFI14:
+ 781              		.cfi_def_cfa_offset 8
+ 782              		.cfi_offset 4, -8
+ 783              		.cfi_offset 14, -4
+ 784 0002 0446     		mov	r4, r0
+  82:Core/Src/command_processor.c ****     
+ 785              		.loc 1 82 5 is_stmt 1 view .LVU157
+  82:Core/Src/command_processor.c ****     
+ 786              		.loc 1 82 31 is_stmt 0 view .LVU158
+ 787 0004 FFF7FEFF 		bl	CommandProcessor_ParseCommand
+ 788              	.LVL78:
+  84:Core/Src/command_processor.c ****     {
+ 789              		.loc 1 84 5 is_stmt 1 view .LVU159
+ 790 0008 0728     		cmp	r0, #7
+ 791 000a 41D8     		bhi	.L69
+ 792 000c DFE800F0 		tbb	[pc, r0]
+ 793              	.L71:
+ 794 0010 04       		.byte	(.L78-.L71)/2
+ 795 0011 07       		.byte	(.L77-.L71)/2
+ 796 0012 0B       		.byte	(.L76-.L71)/2
+ 797 0013 0F       		.byte	(.L75-.L71)/2
+ 798 0014 13       		.byte	(.L74-.L71)/2
+ 799 0015 21       		.byte	(.L73-.L71)/2
+ 800 0016 2F       		.byte	(.L72-.L71)/2
+ 801 0017 3D       		.byte	(.L70-.L71)/2
+ 802              		.p2align 1
+ 803              	.L78:
+  87:Core/Src/command_processor.c ****             break;
+ 804              		.loc 1 87 13 view .LVU160
+ 805 0018 FFF7FEFF 		bl	CommandProcessor_HandleConnect
+ 806              	.LVL79:
+  88:Core/Src/command_processor.c ****             
+ 807              		.loc 1 88 13 view .LVU161
+ 808              	.L68:
+ 154:Core/Src/command_processor.c **** 
+ 809              		.loc 1 154 1 is_stmt 0 view .LVU162
+ 810 001c 10BD     		pop	{r4, pc}
+ 811              	.LVL80:
+ 812              	.L77:
+  91:Core/Src/command_processor.c ****             break;
+ 813              		.loc 1 91 13 is_stmt 1 view .LVU163
+ 814 001e 0020     		movs	r0, #0
+ 815              	.LVL81:
+  91:Core/Src/command_processor.c ****             break;
+ 816              		.loc 1 91 13 is_stmt 0 view .LVU164
+ 817 0020 FFF7FEFF 		bl	CommandProcessor_HandleGetCode
+ 818              	.LVL82:
+  92:Core/Src/command_processor.c ****             
+ 819              		.loc 1 92 13 is_stmt 1 view .LVU165
+ 820 0024 FAE7     		b	.L68
+ 821              	.LVL83:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 23
+
+
+ 822              	.L76:
+  95:Core/Src/command_processor.c ****             break;
+ 823              		.loc 1 95 13 view .LVU166
+ 824 0026 0120     		movs	r0, #1
+ 825              	.LVL84:
+  95:Core/Src/command_processor.c ****             break;
+ 826              		.loc 1 95 13 is_stmt 0 view .LVU167
+ 827 0028 FFF7FEFF 		bl	CommandProcessor_HandleGetCode
+ 828              	.LVL85:
+  96:Core/Src/command_processor.c ****             
+ 829              		.loc 1 96 13 is_stmt 1 view .LVU168
+ 830 002c F6E7     		b	.L68
+ 831              	.LVL86:
+ 832              	.L75:
+  99:Core/Src/command_processor.c ****             break;
+ 833              		.loc 1 99 13 view .LVU169
+ 834 002e 0220     		movs	r0, #2
+ 835              	.LVL87:
+  99:Core/Src/command_processor.c ****             break;
+ 836              		.loc 1 99 13 is_stmt 0 view .LVU170
+ 837 0030 FFF7FEFF 		bl	CommandProcessor_HandleGetCode
+ 838              	.LVL88:
+ 100:Core/Src/command_processor.c ****             
+ 839              		.loc 1 100 13 is_stmt 1 view .LVU171
+ 840 0034 F2E7     		b	.L68
+ 841              	.LVL89:
+ 842              	.L74:
+ 843              	.LBB3:
+ 104:Core/Src/command_processor.c ****                 if (param != NULL)
+ 844              		.loc 1 104 17 view .LVU172
+ 104:Core/Src/command_processor.c ****                 if (param != NULL)
+ 845              		.loc 1 104 31 is_stmt 0 view .LVU173
+ 846 0036 2046     		mov	r0, r4
+ 847              	.LVL90:
+ 104:Core/Src/command_processor.c ****                 if (param != NULL)
+ 848              		.loc 1 104 31 view .LVU174
+ 849 0038 FFF7FEFF 		bl	CommandProcessor_ExtractParameter
+ 850              	.LVL91:
+ 105:Core/Src/command_processor.c ****                 {
+ 851              		.loc 1 105 17 is_stmt 1 view .LVU175
+ 105:Core/Src/command_processor.c ****                 {
+ 852              		.loc 1 105 20 is_stmt 0 view .LVU176
+ 853 003c 0146     		mov	r1, r0
+ 854 003e 18B1     		cbz	r0, .L80
+ 107:Core/Src/command_processor.c ****                 }
+ 855              		.loc 1 107 21 is_stmt 1 view .LVU177
+ 856 0040 0020     		movs	r0, #0
+ 857              	.LVL92:
+ 107:Core/Src/command_processor.c ****                 }
+ 858              		.loc 1 107 21 is_stmt 0 view .LVU178
+ 859 0042 FFF7FEFF 		bl	CommandProcessor_HandleSetCode
+ 860              	.LVL93:
+ 107:Core/Src/command_processor.c ****                 }
+ 861              		.loc 1 107 21 view .LVU179
+ 862 0046 E9E7     		b	.L68
+ 863              	.LVL94:
+ 864              	.L80:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 24
+
+
+ 111:Core/Src/command_processor.c ****                 }
+ 865              		.loc 1 111 21 is_stmt 1 view .LVU180
+ 866 0048 0021     		movs	r1, #0
+ 867 004a 0420     		movs	r0, #4
+ 868              	.LVL95:
+ 111:Core/Src/command_processor.c ****                 }
+ 869              		.loc 1 111 21 is_stmt 0 view .LVU181
+ 870 004c FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 871              	.LVL96:
+ 872 0050 E4E7     		b	.L68
+ 873              	.LVL97:
+ 874              	.L73:
+ 111:Core/Src/command_processor.c ****                 }
+ 875              		.loc 1 111 21 view .LVU182
+ 876              	.LBE3:
+ 877              	.LBB4:
+ 118:Core/Src/command_processor.c ****                 if (param != NULL)
+ 878              		.loc 1 118 17 is_stmt 1 view .LVU183
+ 118:Core/Src/command_processor.c ****                 if (param != NULL)
+ 879              		.loc 1 118 31 is_stmt 0 view .LVU184
+ 880 0052 2046     		mov	r0, r4
+ 881              	.LVL98:
+ 118:Core/Src/command_processor.c ****                 if (param != NULL)
+ 882              		.loc 1 118 31 view .LVU185
+ 883 0054 FFF7FEFF 		bl	CommandProcessor_ExtractParameter
+ 884              	.LVL99:
+ 119:Core/Src/command_processor.c ****                 {
+ 885              		.loc 1 119 17 is_stmt 1 view .LVU186
+ 119:Core/Src/command_processor.c ****                 {
+ 886              		.loc 1 119 20 is_stmt 0 view .LVU187
+ 887 0058 0146     		mov	r1, r0
+ 888 005a 18B1     		cbz	r0, .L81
+ 121:Core/Src/command_processor.c ****                 }
+ 889              		.loc 1 121 21 is_stmt 1 view .LVU188
+ 890 005c 0120     		movs	r0, #1
+ 891              	.LVL100:
+ 121:Core/Src/command_processor.c ****                 }
+ 892              		.loc 1 121 21 is_stmt 0 view .LVU189
+ 893 005e FFF7FEFF 		bl	CommandProcessor_HandleSetCode
+ 894              	.LVL101:
+ 121:Core/Src/command_processor.c ****                 }
+ 895              		.loc 1 121 21 view .LVU190
+ 896 0062 DBE7     		b	.L68
+ 897              	.LVL102:
+ 898              	.L81:
+ 125:Core/Src/command_processor.c ****                 }
+ 899              		.loc 1 125 21 is_stmt 1 view .LVU191
+ 900 0064 0021     		movs	r1, #0
+ 901 0066 0420     		movs	r0, #4
+ 902              	.LVL103:
+ 125:Core/Src/command_processor.c ****                 }
+ 903              		.loc 1 125 21 is_stmt 0 view .LVU192
+ 904 0068 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 905              	.LVL104:
+ 906 006c D6E7     		b	.L68
+ 907              	.LVL105:
+ 908              	.L72:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 25
+
+
+ 125:Core/Src/command_processor.c ****                 }
+ 909              		.loc 1 125 21 view .LVU193
+ 910              	.LBE4:
+ 911              	.LBB5:
+ 132:Core/Src/command_processor.c ****                 if (param != NULL)
+ 912              		.loc 1 132 17 is_stmt 1 view .LVU194
+ 132:Core/Src/command_processor.c ****                 if (param != NULL)
+ 913              		.loc 1 132 31 is_stmt 0 view .LVU195
+ 914 006e 2046     		mov	r0, r4
+ 915              	.LVL106:
+ 132:Core/Src/command_processor.c ****                 if (param != NULL)
+ 916              		.loc 1 132 31 view .LVU196
+ 917 0070 FFF7FEFF 		bl	CommandProcessor_ExtractParameter
+ 918              	.LVL107:
+ 133:Core/Src/command_processor.c ****                 {
+ 919              		.loc 1 133 17 is_stmt 1 view .LVU197
+ 133:Core/Src/command_processor.c ****                 {
+ 920              		.loc 1 133 20 is_stmt 0 view .LVU198
+ 921 0074 0146     		mov	r1, r0
+ 922 0076 18B1     		cbz	r0, .L82
+ 135:Core/Src/command_processor.c ****                 }
+ 923              		.loc 1 135 21 is_stmt 1 view .LVU199
+ 924 0078 0220     		movs	r0, #2
+ 925              	.LVL108:
+ 135:Core/Src/command_processor.c ****                 }
+ 926              		.loc 1 135 21 is_stmt 0 view .LVU200
+ 927 007a FFF7FEFF 		bl	CommandProcessor_HandleSetCode
+ 928              	.LVL109:
+ 135:Core/Src/command_processor.c ****                 }
+ 929              		.loc 1 135 21 view .LVU201
+ 930 007e CDE7     		b	.L68
+ 931              	.LVL110:
+ 932              	.L82:
+ 139:Core/Src/command_processor.c ****                 }
+ 933              		.loc 1 139 21 is_stmt 1 view .LVU202
+ 934 0080 0021     		movs	r1, #0
+ 935 0082 0420     		movs	r0, #4
+ 936              	.LVL111:
+ 139:Core/Src/command_processor.c ****                 }
+ 937              		.loc 1 139 21 is_stmt 0 view .LVU203
+ 938 0084 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 939              	.LVL112:
+ 940 0088 C8E7     		b	.L68
+ 941              	.LVL113:
+ 942              	.L70:
+ 139:Core/Src/command_processor.c ****                 }
+ 943              		.loc 1 139 21 view .LVU204
+ 944              	.LBE5:
+ 145:Core/Src/command_processor.c ****             break;
+ 945              		.loc 1 145 13 is_stmt 1 view .LVU205
+ 946 008a FFF7FEFF 		bl	CommandProcessor_HandleDisconnect
+ 947              	.LVL114:
+ 146:Core/Src/command_processor.c ****             
+ 948              		.loc 1 146 13 view .LVU206
+ 949 008e C5E7     		b	.L68
+ 950              	.LVL115:
+ 951              	.L69:
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 26
+
+
+ 150:Core/Src/command_processor.c ****             break;
+ 952              		.loc 1 150 13 view .LVU207
+ 953 0090 0021     		movs	r1, #0
+ 954 0092 0320     		movs	r0, #3
+ 955              	.LVL116:
+ 150:Core/Src/command_processor.c ****             break;
+ 956              		.loc 1 150 13 is_stmt 0 view .LVU208
+ 957 0094 FFF7FEFF 		bl	CommandProcessor_SendResponse
+ 958              	.LVL117:
+ 151:Core/Src/command_processor.c ****     }
+ 959              		.loc 1 151 13 is_stmt 1 view .LVU209
+ 154:Core/Src/command_processor.c **** 
+ 960              		.loc 1 154 1 is_stmt 0 view .LVU210
+ 961 0098 C0E7     		b	.L68
+ 962              		.cfi_endproc
+ 963              	.LFE138:
+ 965              		.global	connection_status
+ 966              		.section	.bss.connection_status,"aw",%nobits
+ 969              	connection_status:
+ 970 0000 00       		.space	1
+ 971              		.text
+ 972              	.Letext0:
+ 973              		.file 2 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 974              		.file 3 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 975              		.file 4 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 976              		.file 5 "Core/Inc/command_processor.h"
+ 977              		.file 6 "Core/Inc/code_storage.h"
+ 978              		.file 7 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 979              		.file 8 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 980              		.file 9 "Core/Inc/uart_handler.h"
+ARM GAS  C:\Users\User\AppData\Local\Temp\cclmmVVH.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 command_processor.c
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:21     .text.CommandProcessor_Init:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:27     .text.CommandProcessor_Init:00000000 CommandProcessor_Init
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:51     .text.CommandProcessor_Init:00000010 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:969    .bss.connection_status:00000000 connection_status
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:56     .rodata.CommandProcessor_SendResponse.str1.4:00000000 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:78     .text.CommandProcessor_SendResponse:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:84     .text.CommandProcessor_SendResponse:00000000 CommandProcessor_SendResponse
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:105    .text.CommandProcessor_SendResponse:0000000c $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:234    .text.CommandProcessor_SendResponse:00000084 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:245    .rodata.CommandProcessor_ParseCommand.str1.4:00000000 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:270    .text.CommandProcessor_ParseCommand:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:276    .text.CommandProcessor_ParseCommand:00000000 CommandProcessor_ParseCommand
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:402    .text.CommandProcessor_ParseCommand:00000088 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:414    .text.CommandProcessor_ExtractParameter:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:420    .text.CommandProcessor_ExtractParameter:00000000 CommandProcessor_ExtractParameter
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:455    .text.CommandProcessor_HandleConnect:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:461    .text.CommandProcessor_HandleConnect:00000000 CommandProcessor_HandleConnect
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:487    .text.CommandProcessor_HandleConnect:00000014 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:492    .text.CommandProcessor_HandleGetCode:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:498    .text.CommandProcessor_HandleGetCode:00000000 CommandProcessor_HandleGetCode
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:594    .text.CommandProcessor_HandleGetCode:00000054 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:600    .text.CommandProcessor_HandleSetCode:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:606    .text.CommandProcessor_HandleSetCode:00000000 CommandProcessor_HandleSetCode
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:724    .text.CommandProcessor_HandleSetCode:00000068 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:729    .text.CommandProcessor_HandleDisconnect:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:735    .text.CommandProcessor_HandleDisconnect:00000000 CommandProcessor_HandleDisconnect
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:760    .text.CommandProcessor_HandleDisconnect:00000010 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:765    .text.CommandProcessor_ProcessCommand:00000000 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:771    .text.CommandProcessor_ProcessCommand:00000000 CommandProcessor_ProcessCommand
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:794    .text.CommandProcessor_ProcessCommand:00000010 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:802    .text.CommandProcessor_ProcessCommand:00000018 $t
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:970    .bss.connection_status:00000000 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:110    .text.CommandProcessor_SendResponse:00000011 $d
+C:\Users\User\AppData\Local\Temp\cclmmVVH.s:110    .text.CommandProcessor_SendResponse:00000012 $t
+
+UNDEFINED SYMBOLS
+CodeStorage_Init
+snprintf
+UART_SendString
+strncmp
+strchr
+CodeStorage_IsCodeSet
+CodeStorage_GetCode
+strlen
+CodeStorage_SetCode

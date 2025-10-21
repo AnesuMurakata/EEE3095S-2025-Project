@@ -19,10 +19,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "uart_handler.h"
+#include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "command_processor.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

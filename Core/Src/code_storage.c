@@ -301,7 +301,6 @@ static uint8_t CodeStorage_ProgramFlash(access_codes_t* codes)
 {
     /* USER CODE BEGIN CodeStorage_ProgramFlash */
     uint32_t* data_ptr = (uint32_t*)codes;
-    uint32_t* flash_ptr = (uint32_t*)FLASH_DATA_ADDRESS;
     uint32_t data_size = sizeof(access_codes_t);
     uint32_t words_to_write = (data_size + 3) / 4; // Round up to word boundary
     

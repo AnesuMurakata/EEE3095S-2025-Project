@@ -56,6 +56,11 @@ void Error_Handler(void);
 
 /* USER CODE END EFP */
 
+/* Exported variables ---------------------------------------------------------*/
+/* USER CODE BEGIN EV */
+extern UART_HandleTypeDef huart1;
+/* USER CODE END EV */
+
 /* Private defines -----------------------------------------------------------*/
 
 /* USER CODE BEGIN Private defines */

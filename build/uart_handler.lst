@@ -1,0 +1,676 @@
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"uart_handler.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/uart_handler.c"
+  20              		.section	.text.UART_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	UART_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	UART_Init:
+  28              	.LFB134:
+   1:Core/Src/uart_handler.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/uart_handler.c **** /**
+   3:Core/Src/uart_handler.c ****   ******************************************************************************
+   4:Core/Src/uart_handler.c ****   * @file           : uart_handler.c
+   5:Core/Src/uart_handler.c ****   * @brief          : UART communication handler implementation
+   6:Core/Src/uart_handler.c ****   ******************************************************************************
+   7:Core/Src/uart_handler.c ****   * @attention
+   8:Core/Src/uart_handler.c ****   *
+   9:Core/Src/uart_handler.c ****   * Copyright (c) 2025 STMicroelectronics.
+  10:Core/Src/uart_handler.c ****   * All rights reserved.
+  11:Core/Src/uart_handler.c ****   *
+  12:Core/Src/uart_handler.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Core/Src/uart_handler.c ****   * in the root directory of this software component.
+  14:Core/Src/uart_handler.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Core/Src/uart_handler.c ****   *
+  16:Core/Src/uart_handler.c ****   ******************************************************************************
+  17:Core/Src/uart_handler.c ****   */
+  18:Core/Src/uart_handler.c **** /* USER CODE END Header */
+  19:Core/Src/uart_handler.c **** 
+  20:Core/Src/uart_handler.c **** /* Includes ------------------------------------------------------------------*/
+  21:Core/Src/uart_handler.c **** #include "uart_handler.h"
+  22:Core/Src/uart_handler.c **** #include "main.h"
+  23:Core/Src/uart_handler.c **** 
+  24:Core/Src/uart_handler.c **** /* Private includes ----------------------------------------------------------*/
+  25:Core/Src/uart_handler.c **** /* USER CODE BEGIN Includes */
+  26:Core/Src/uart_handler.c **** #include "command_processor.h"
+  27:Core/Src/uart_handler.c **** #include <string.h>
+  28:Core/Src/uart_handler.c **** /* USER CODE END Includes */
+  29:Core/Src/uart_handler.c **** 
+  30:Core/Src/uart_handler.c **** /* Private typedef -----------------------------------------------------------*/
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 2
+
+
+  31:Core/Src/uart_handler.c **** /* USER CODE BEGIN PTD */
+  32:Core/Src/uart_handler.c **** 
+  33:Core/Src/uart_handler.c **** /* USER CODE END PTD */
+  34:Core/Src/uart_handler.c **** 
+  35:Core/Src/uart_handler.c **** /* Private define ------------------------------------------------------------*/
+  36:Core/Src/uart_handler.c **** /* USER CODE BEGIN PD */
+  37:Core/Src/uart_handler.c **** 
+  38:Core/Src/uart_handler.c **** /* USER CODE END PD */
+  39:Core/Src/uart_handler.c **** 
+  40:Core/Src/uart_handler.c **** /* Private macro -------------------------------------------------------------*/
+  41:Core/Src/uart_handler.c **** /* USER CODE BEGIN PM */
+  42:Core/Src/uart_handler.c **** 
+  43:Core/Src/uart_handler.c **** /* USER CODE END PM */
+  44:Core/Src/uart_handler.c **** 
+  45:Core/Src/uart_handler.c **** /* Private variables ---------------------------------------------------------*/
+  46:Core/Src/uart_handler.c **** /* USER CODE BEGIN PV */
+  47:Core/Src/uart_handler.c **** char uart_rx_buffer[UART_RX_BUFFER_SIZE];
+  48:Core/Src/uart_handler.c **** char uart_tx_buffer[UART_TX_BUFFER_SIZE];
+  49:Core/Src/uart_handler.c **** uint16_t rx_buffer_index = 0;
+  50:Core/Src/uart_handler.c **** uint8_t rx_complete = 0;
+  51:Core/Src/uart_handler.c **** 
+  52:Core/Src/uart_handler.c **** /* USER CODE END PV */
+  53:Core/Src/uart_handler.c **** 
+  54:Core/Src/uart_handler.c **** /* Private function prototypes -----------------------------------------------*/
+  55:Core/Src/uart_handler.c **** /* USER CODE BEGIN PFP */
+  56:Core/Src/uart_handler.c **** 
+  57:Core/Src/uart_handler.c **** /* USER CODE END PFP */
+  58:Core/Src/uart_handler.c **** 
+  59:Core/Src/uart_handler.c **** /* Private user code ---------------------------------------------------------*/
+  60:Core/Src/uart_handler.c **** /* USER CODE BEGIN 0 */
+  61:Core/Src/uart_handler.c **** 
+  62:Core/Src/uart_handler.c **** /* USER CODE END 0 */
+  63:Core/Src/uart_handler.c **** 
+  64:Core/Src/uart_handler.c **** /**
+  65:Core/Src/uart_handler.c ****   * @brief  Initialize UART handler
+  66:Core/Src/uart_handler.c ****   * @retval None
+  67:Core/Src/uart_handler.c ****   */
+  68:Core/Src/uart_handler.c **** void UART_Init(void)
+  69:Core/Src/uart_handler.c **** {
+  29              		.loc 1 69 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 38B5     		push	{r3, r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 3, -16
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  70:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_Init */
+  71:Core/Src/uart_handler.c ****     // Clear buffers
+  72:Core/Src/uart_handler.c ****     memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
+  40              		.loc 1 72 5 view .LVU1
+  41 0002 0C4C     		ldr	r4, .L3
+  42 0004 4FF48075 		mov	r5, #256
+  43 0008 2A46     		mov	r2, r5
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 3
+
+
+  44 000a 0021     		movs	r1, #0
+  45 000c 2046     		mov	r0, r4
+  46 000e FFF7FEFF 		bl	memset
+  47              	.LVL0:
+  73:Core/Src/uart_handler.c ****     memset(uart_tx_buffer, 0, UART_TX_BUFFER_SIZE);
+  48              		.loc 1 73 5 view .LVU2
+  49 0012 2A46     		mov	r2, r5
+  50 0014 0021     		movs	r1, #0
+  51 0016 0848     		ldr	r0, .L3+4
+  52 0018 FFF7FEFF 		bl	memset
+  53              	.LVL1:
+  74:Core/Src/uart_handler.c ****     rx_buffer_index = 0;
+  54              		.loc 1 74 5 view .LVU3
+  55              		.loc 1 74 21 is_stmt 0 view .LVU4
+  56 001c 0023     		movs	r3, #0
+  57 001e 074A     		ldr	r2, .L3+8
+  58 0020 1380     		strh	r3, [r2]	@ movhi
+  75:Core/Src/uart_handler.c ****     rx_complete = 0;
+  59              		.loc 1 75 5 is_stmt 1 view .LVU5
+  60              		.loc 1 75 17 is_stmt 0 view .LVU6
+  61 0022 074A     		ldr	r2, .L3+12
+  62 0024 1370     		strb	r3, [r2]
+  76:Core/Src/uart_handler.c ****     
+  77:Core/Src/uart_handler.c ****     // Start receiving data
+  78:Core/Src/uart_handler.c ****     HAL_UART_Receive_IT(&huart1, (uint8_t*)&uart_rx_buffer[rx_buffer_index], 1);
+  63              		.loc 1 78 5 is_stmt 1 view .LVU7
+  64 0026 0122     		movs	r2, #1
+  65 0028 2146     		mov	r1, r4
+  66 002a 0648     		ldr	r0, .L3+16
+  67 002c FFF7FEFF 		bl	HAL_UART_Receive_IT
+  68              	.LVL2:
+  79:Core/Src/uart_handler.c ****     /* USER CODE END UART_Init */
+  80:Core/Src/uart_handler.c **** }
+  69              		.loc 1 80 1 is_stmt 0 view .LVU8
+  70 0030 38BD     		pop	{r3, r4, r5, pc}
+  71              	.L4:
+  72 0032 00BF     		.align	2
+  73              	.L3:
+  74 0034 00000000 		.word	uart_rx_buffer
+  75 0038 00000000 		.word	uart_tx_buffer
+  76 003c 00000000 		.word	rx_buffer_index
+  77 0040 00000000 		.word	rx_complete
+  78 0044 00000000 		.word	huart1
+  79              		.cfi_endproc
+  80              	.LFE134:
+  82              		.section	.text.UART_SendString,"ax",%progbits
+  83              		.align	1
+  84              		.global	UART_SendString
+  85              		.syntax unified
+  86              		.thumb
+  87              		.thumb_func
+  89              	UART_SendString:
+  90              	.LVL3:
+  91              	.LFB135:
+  81:Core/Src/uart_handler.c **** 
+  82:Core/Src/uart_handler.c **** /**
+  83:Core/Src/uart_handler.c ****   * @brief  Send a string via UART
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 4
+
+
+  84:Core/Src/uart_handler.c ****   * @param  str: Pointer to string to send
+  85:Core/Src/uart_handler.c ****   * @retval None
+  86:Core/Src/uart_handler.c ****   */
+  87:Core/Src/uart_handler.c **** void UART_SendString(char* str)
+  88:Core/Src/uart_handler.c **** {
+  92              		.loc 1 88 1 is_stmt 1 view -0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 0, uses_anonymous_args = 0
+  96              		.loc 1 88 1 is_stmt 0 view .LVU10
+  97 0000 10B5     		push	{r4, lr}
+  98              	.LCFI1:
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 4, -8
+ 101              		.cfi_offset 14, -4
+ 102 0002 0446     		mov	r4, r0
+  89:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_SendString */
+  90:Core/Src/uart_handler.c ****     HAL_UART_Transmit(&huart1, (uint8_t*)str, strlen(str), HAL_MAX_DELAY);
+ 103              		.loc 1 90 5 is_stmt 1 view .LVU11
+ 104              		.loc 1 90 47 is_stmt 0 view .LVU12
+ 105 0004 FFF7FEFF 		bl	strlen
+ 106              	.LVL4:
+ 107              		.loc 1 90 5 discriminator 1 view .LVU13
+ 108 0008 4FF0FF33 		mov	r3, #-1
+ 109 000c 82B2     		uxth	r2, r0
+ 110 000e 2146     		mov	r1, r4
+ 111 0010 0148     		ldr	r0, .L7
+ 112 0012 FFF7FEFF 		bl	HAL_UART_Transmit
+ 113              	.LVL5:
+  91:Core/Src/uart_handler.c ****     /* USER CODE END UART_SendString */
+  92:Core/Src/uart_handler.c **** }
+ 114              		.loc 1 92 1 view .LVU14
+ 115 0016 10BD     		pop	{r4, pc}
+ 116              	.LVL6:
+ 117              	.L8:
+ 118              		.loc 1 92 1 view .LVU15
+ 119              		.align	2
+ 120              	.L7:
+ 121 0018 00000000 		.word	huart1
+ 122              		.cfi_endproc
+ 123              	.LFE135:
+ 125              		.section	.text.UART_SendChar,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	UART_SendChar
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	UART_SendChar:
+ 133              	.LVL7:
+ 134              	.LFB136:
+  93:Core/Src/uart_handler.c **** 
+  94:Core/Src/uart_handler.c **** /**
+  95:Core/Src/uart_handler.c ****   * @brief  Send a single character via UART
+  96:Core/Src/uart_handler.c ****   * @param  ch: Character to send
+  97:Core/Src/uart_handler.c ****   * @retval None
+  98:Core/Src/uart_handler.c ****   */
+  99:Core/Src/uart_handler.c **** void UART_SendChar(char ch)
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 5
+
+
+ 100:Core/Src/uart_handler.c **** {
+ 135              		.loc 1 100 1 is_stmt 1 view -0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 8
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139              		.loc 1 100 1 is_stmt 0 view .LVU17
+ 140 0000 00B5     		push	{lr}
+ 141              	.LCFI2:
+ 142              		.cfi_def_cfa_offset 4
+ 143              		.cfi_offset 14, -4
+ 144 0002 83B0     		sub	sp, sp, #12
+ 145              	.LCFI3:
+ 146              		.cfi_def_cfa_offset 16
+ 147 0004 8DF80700 		strb	r0, [sp, #7]
+ 101:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_SendChar */
+ 102:Core/Src/uart_handler.c ****     HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+ 148              		.loc 1 102 5 is_stmt 1 view .LVU18
+ 149 0008 4FF0FF33 		mov	r3, #-1
+ 150 000c 0122     		movs	r2, #1
+ 151 000e 0DF10701 		add	r1, sp, #7
+ 152 0012 0348     		ldr	r0, .L11
+ 153              	.LVL8:
+ 154              		.loc 1 102 5 is_stmt 0 view .LVU19
+ 155 0014 FFF7FEFF 		bl	HAL_UART_Transmit
+ 156              	.LVL9:
+ 103:Core/Src/uart_handler.c ****     /* USER CODE END UART_SendChar */
+ 104:Core/Src/uart_handler.c **** }
+ 157              		.loc 1 104 1 view .LVU20
+ 158 0018 03B0     		add	sp, sp, #12
+ 159              	.LCFI4:
+ 160              		.cfi_def_cfa_offset 4
+ 161              		@ sp needed
+ 162 001a 5DF804FB 		ldr	pc, [sp], #4
+ 163              	.L12:
+ 164 001e 00BF     		.align	2
+ 165              	.L11:
+ 166 0020 00000000 		.word	huart1
+ 167              		.cfi_endproc
+ 168              	.LFE136:
+ 170              		.section	.text.UART_ReceiveString,"ax",%progbits
+ 171              		.align	1
+ 172              		.global	UART_ReceiveString
+ 173              		.syntax unified
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	UART_ReceiveString:
+ 178              	.LVL10:
+ 179              	.LFB137:
+ 105:Core/Src/uart_handler.c **** 
+ 106:Core/Src/uart_handler.c **** /**
+ 107:Core/Src/uart_handler.c ****   * @brief  Receive a string via UART (blocking)
+ 108:Core/Src/uart_handler.c ****   * @param  buffer: Buffer to store received string
+ 109:Core/Src/uart_handler.c ****   * @param  maxLength: Maximum length to receive
+ 110:Core/Src/uart_handler.c ****   * @retval None
+ 111:Core/Src/uart_handler.c ****   */
+ 112:Core/Src/uart_handler.c **** void UART_ReceiveString(char* buffer, uint16_t maxLength)
+ 113:Core/Src/uart_handler.c **** {
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 6
+
+
+ 180              		.loc 1 113 1 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              		.loc 1 113 1 is_stmt 0 view .LVU22
+ 185 0000 08B5     		push	{r3, lr}
+ 186              	.LCFI5:
+ 187              		.cfi_def_cfa_offset 8
+ 188              		.cfi_offset 3, -8
+ 189              		.cfi_offset 14, -4
+ 190 0002 0A46     		mov	r2, r1
+ 114:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_ReceiveString */
+ 115:Core/Src/uart_handler.c ****     HAL_UART_Receive(&huart1, (uint8_t*)buffer, maxLength, HAL_MAX_DELAY);
+ 191              		.loc 1 115 5 is_stmt 1 view .LVU23
+ 192 0004 4FF0FF33 		mov	r3, #-1
+ 193 0008 0146     		mov	r1, r0
+ 194              	.LVL11:
+ 195              		.loc 1 115 5 is_stmt 0 view .LVU24
+ 196 000a 0248     		ldr	r0, .L15
+ 197              	.LVL12:
+ 198              		.loc 1 115 5 view .LVU25
+ 199 000c FFF7FEFF 		bl	HAL_UART_Receive
+ 200              	.LVL13:
+ 116:Core/Src/uart_handler.c ****     /* USER CODE END UART_ReceiveString */
+ 117:Core/Src/uart_handler.c **** }
+ 201              		.loc 1 117 1 view .LVU26
+ 202 0010 08BD     		pop	{r3, pc}
+ 203              	.L16:
+ 204 0012 00BF     		.align	2
+ 205              	.L15:
+ 206 0014 00000000 		.word	huart1
+ 207              		.cfi_endproc
+ 208              	.LFE137:
+ 210              		.section	.text.UART_ProcessReceivedData,"ax",%progbits
+ 211              		.align	1
+ 212              		.global	UART_ProcessReceivedData
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ 217              	UART_ProcessReceivedData:
+ 218              	.LFB138:
+ 118:Core/Src/uart_handler.c **** 
+ 119:Core/Src/uart_handler.c **** /**
+ 120:Core/Src/uart_handler.c ****   * @brief  Process received UART data
+ 121:Core/Src/uart_handler.c ****   * @retval None
+ 122:Core/Src/uart_handler.c ****   */
+ 123:Core/Src/uart_handler.c **** void UART_ProcessReceivedData(void)
+ 124:Core/Src/uart_handler.c **** {
+ 219              		.loc 1 124 1 is_stmt 1 view -0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_ProcessReceivedData */
+ 126:Core/Src/uart_handler.c ****     if (rx_complete)
+ 223              		.loc 1 126 5 view .LVU28
+ 224              		.loc 1 126 9 is_stmt 0 view .LVU29
+ 225 0000 0C4B     		ldr	r3, .L24
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 7
+
+
+ 226 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 227              		.loc 1 126 8 view .LVU30
+ 228 0004 03B9     		cbnz	r3, .L23
+ 229 0006 7047     		bx	lr
+ 230              	.L23:
+ 124:Core/Src/uart_handler.c ****     /* USER CODE BEGIN UART_ProcessReceivedData */
+ 231              		.loc 1 124 1 view .LVU31
+ 232 0008 10B5     		push	{r4, lr}
+ 233              	.LCFI6:
+ 234              		.cfi_def_cfa_offset 8
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+ 127:Core/Src/uart_handler.c ****     {
+ 128:Core/Src/uart_handler.c ****         // Process the received data using command processor
+ 129:Core/Src/uart_handler.c ****         CommandProcessor_ProcessCommand(uart_rx_buffer);
+ 237              		.loc 1 129 9 is_stmt 1 view .LVU32
+ 238 000a 0B4C     		ldr	r4, .L24+4
+ 239 000c 2046     		mov	r0, r4
+ 240 000e FFF7FEFF 		bl	CommandProcessor_ProcessCommand
+ 241              	.LVL14:
+ 130:Core/Src/uart_handler.c ****         
+ 131:Core/Src/uart_handler.c ****         // Clear buffer and reset
+ 132:Core/Src/uart_handler.c ****         memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
+ 242              		.loc 1 132 9 view .LVU33
+ 243 0012 4FF48072 		mov	r2, #256
+ 244 0016 0021     		movs	r1, #0
+ 245 0018 2046     		mov	r0, r4
+ 246 001a FFF7FEFF 		bl	memset
+ 247              	.LVL15:
+ 133:Core/Src/uart_handler.c ****         rx_buffer_index = 0;
+ 248              		.loc 1 133 9 view .LVU34
+ 249              		.loc 1 133 25 is_stmt 0 view .LVU35
+ 250 001e 0023     		movs	r3, #0
+ 251 0020 064A     		ldr	r2, .L24+8
+ 252 0022 1380     		strh	r3, [r2]	@ movhi
+ 134:Core/Src/uart_handler.c ****         rx_complete = 0;
+ 253              		.loc 1 134 9 is_stmt 1 view .LVU36
+ 254              		.loc 1 134 21 is_stmt 0 view .LVU37
+ 255 0024 034A     		ldr	r2, .L24
+ 256 0026 1370     		strb	r3, [r2]
+ 135:Core/Src/uart_handler.c ****         
+ 136:Core/Src/uart_handler.c ****         // Restart receiving
+ 137:Core/Src/uart_handler.c ****         HAL_UART_Receive_IT(&huart1, (uint8_t*)&uart_rx_buffer[rx_buffer_index], 1);
+ 257              		.loc 1 137 9 is_stmt 1 view .LVU38
+ 258 0028 0122     		movs	r2, #1
+ 259 002a 2146     		mov	r1, r4
+ 260 002c 0448     		ldr	r0, .L24+12
+ 261 002e FFF7FEFF 		bl	HAL_UART_Receive_IT
+ 262              	.LVL16:
+ 138:Core/Src/uart_handler.c ****     }
+ 139:Core/Src/uart_handler.c ****     /* USER CODE END UART_ProcessReceivedData */
+ 140:Core/Src/uart_handler.c **** }
+ 263              		.loc 1 140 1 is_stmt 0 view .LVU39
+ 264 0032 10BD     		pop	{r4, pc}
+ 265              	.L25:
+ 266              		.align	2
+ 267              	.L24:
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 8
+
+
+ 268 0034 00000000 		.word	rx_complete
+ 269 0038 00000000 		.word	uart_rx_buffer
+ 270 003c 00000000 		.word	rx_buffer_index
+ 271 0040 00000000 		.word	huart1
+ 272              		.cfi_endproc
+ 273              	.LFE138:
+ 275              		.section	.text.HAL_UART_RxCpltCallback,"ax",%progbits
+ 276              		.align	1
+ 277              		.global	HAL_UART_RxCpltCallback
+ 278              		.syntax unified
+ 279              		.thumb
+ 280              		.thumb_func
+ 282              	HAL_UART_RxCpltCallback:
+ 283              	.LVL17:
+ 284              	.LFB139:
+ 141:Core/Src/uart_handler.c **** 
+ 142:Core/Src/uart_handler.c **** /* USER CODE BEGIN 4 */
+ 143:Core/Src/uart_handler.c **** 
+ 144:Core/Src/uart_handler.c **** /* USER CODE END 4 */
+ 145:Core/Src/uart_handler.c **** 
+ 146:Core/Src/uart_handler.c **** /**
+ 147:Core/Src/uart_handler.c ****   * @brief  UART receive complete callback
+ 148:Core/Src/uart_handler.c ****   * @param  huart: UART handle
+ 149:Core/Src/uart_handler.c ****   * @retval None
+ 150:Core/Src/uart_handler.c ****   */
+ 151:Core/Src/uart_handler.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+ 152:Core/Src/uart_handler.c **** {
+ 285              		.loc 1 152 1 is_stmt 1 view -0
+ 286              		.cfi_startproc
+ 287              		@ args = 0, pretend = 0, frame = 0
+ 288              		@ frame_needed = 0, uses_anonymous_args = 0
+ 289              		.loc 1 152 1 is_stmt 0 view .LVU41
+ 290 0000 08B5     		push	{r3, lr}
+ 291              	.LCFI7:
+ 292              		.cfi_def_cfa_offset 8
+ 293              		.cfi_offset 3, -8
+ 294              		.cfi_offset 14, -4
+ 153:Core/Src/uart_handler.c ****     /* USER CODE BEGIN HAL_UART_RxCpltCallback */
+ 154:Core/Src/uart_handler.c ****     if (huart->Instance == USART1)
+ 295              		.loc 1 154 5 is_stmt 1 view .LVU42
+ 296              		.loc 1 154 14 is_stmt 0 view .LVU43
+ 297 0002 0268     		ldr	r2, [r0]
+ 298              		.loc 1 154 8 view .LVU44
+ 299 0004 134B     		ldr	r3, .L33
+ 300 0006 9A42     		cmp	r2, r3
+ 301 0008 00D0     		beq	.L32
+ 302              	.LVL18:
+ 303              	.L26:
+ 155:Core/Src/uart_handler.c ****     {
+ 156:Core/Src/uart_handler.c ****         // Check for end of line
+ 157:Core/Src/uart_handler.c ****         if (uart_rx_buffer[rx_buffer_index] == '\r' || uart_rx_buffer[rx_buffer_index] == '\n')
+ 158:Core/Src/uart_handler.c ****         {
+ 159:Core/Src/uart_handler.c ****             uart_rx_buffer[rx_buffer_index] = '\0'; // Null terminate
+ 160:Core/Src/uart_handler.c ****             rx_complete = 1;
+ 161:Core/Src/uart_handler.c ****         }
+ 162:Core/Src/uart_handler.c ****         else
+ 163:Core/Src/uart_handler.c ****         {
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 9
+
+
+ 164:Core/Src/uart_handler.c ****             rx_buffer_index++;
+ 165:Core/Src/uart_handler.c ****             if (rx_buffer_index >= UART_RX_BUFFER_SIZE - 1)
+ 166:Core/Src/uart_handler.c ****             {
+ 167:Core/Src/uart_handler.c ****                 // Buffer overflow, reset
+ 168:Core/Src/uart_handler.c ****                 rx_buffer_index = 0;
+ 169:Core/Src/uart_handler.c ****                 memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
+ 170:Core/Src/uart_handler.c ****             }
+ 171:Core/Src/uart_handler.c ****             else
+ 172:Core/Src/uart_handler.c ****             {
+ 173:Core/Src/uart_handler.c ****                 // Continue receiving
+ 174:Core/Src/uart_handler.c ****                 HAL_UART_Receive_IT(&huart1, (uint8_t*)&uart_rx_buffer[rx_buffer_index], 1);
+ 175:Core/Src/uart_handler.c ****             }
+ 176:Core/Src/uart_handler.c ****         }
+ 177:Core/Src/uart_handler.c ****     }
+ 178:Core/Src/uart_handler.c ****     /* USER CODE END HAL_UART_RxCpltCallback */
+ 179:Core/Src/uart_handler.c **** }
+ 304              		.loc 1 179 1 view .LVU45
+ 305 000a 08BD     		pop	{r3, pc}
+ 306              	.LVL19:
+ 307              	.L32:
+ 157:Core/Src/uart_handler.c ****         {
+ 308              		.loc 1 157 9 is_stmt 1 view .LVU46
+ 157:Core/Src/uart_handler.c ****         {
+ 309              		.loc 1 157 27 is_stmt 0 view .LVU47
+ 310 000c 124B     		ldr	r3, .L33+4
+ 311 000e 1988     		ldrh	r1, [r3]
+ 312 0010 124B     		ldr	r3, .L33+8
+ 313 0012 5B5C     		ldrb	r3, [r3, r1]	@ zero_extendqisi2
+ 157:Core/Src/uart_handler.c ****         {
+ 314              		.loc 1 157 12 view .LVU48
+ 315 0014 0D2B     		cmp	r3, #13
+ 316 0016 0FD0     		beq	.L28
+ 157:Core/Src/uart_handler.c ****         {
+ 317              		.loc 1 157 53 discriminator 1 view .LVU49
+ 318 0018 0A2B     		cmp	r3, #10
+ 319 001a 0DD0     		beq	.L28
+ 164:Core/Src/uart_handler.c ****             if (rx_buffer_index >= UART_RX_BUFFER_SIZE - 1)
+ 320              		.loc 1 164 13 is_stmt 1 view .LVU50
+ 164:Core/Src/uart_handler.c ****             if (rx_buffer_index >= UART_RX_BUFFER_SIZE - 1)
+ 321              		.loc 1 164 28 is_stmt 0 view .LVU51
+ 322 001c 0131     		adds	r1, r1, #1
+ 323 001e 89B2     		uxth	r1, r1
+ 324 0020 0D4B     		ldr	r3, .L33+4
+ 325 0022 1980     		strh	r1, [r3]	@ movhi
+ 165:Core/Src/uart_handler.c ****             {
+ 326              		.loc 1 165 13 is_stmt 1 view .LVU52
+ 165:Core/Src/uart_handler.c ****             {
+ 327              		.loc 1 165 16 is_stmt 0 view .LVU53
+ 328 0024 FE29     		cmp	r1, #254
+ 329 0026 0ED9     		bls	.L30
+ 168:Core/Src/uart_handler.c ****                 memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
+ 330              		.loc 1 168 17 is_stmt 1 view .LVU54
+ 168:Core/Src/uart_handler.c ****                 memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
+ 331              		.loc 1 168 33 is_stmt 0 view .LVU55
+ 332 0028 0021     		movs	r1, #0
+ 333 002a 1980     		strh	r1, [r3]	@ movhi
+ 169:Core/Src/uart_handler.c ****             }
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 10
+
+
+ 334              		.loc 1 169 17 is_stmt 1 view .LVU56
+ 335 002c 4FF48072 		mov	r2, #256
+ 336 0030 0A48     		ldr	r0, .L33+8
+ 337              	.LVL20:
+ 169:Core/Src/uart_handler.c ****             }
+ 338              		.loc 1 169 17 is_stmt 0 view .LVU57
+ 339 0032 FFF7FEFF 		bl	memset
+ 340              	.LVL21:
+ 341 0036 E8E7     		b	.L26
+ 342              	.LVL22:
+ 343              	.L28:
+ 159:Core/Src/uart_handler.c ****             rx_complete = 1;
+ 344              		.loc 1 159 13 is_stmt 1 view .LVU58
+ 159:Core/Src/uart_handler.c ****             rx_complete = 1;
+ 345              		.loc 1 159 45 is_stmt 0 view .LVU59
+ 346 0038 084B     		ldr	r3, .L33+8
+ 347 003a 0022     		movs	r2, #0
+ 348 003c 5A54     		strb	r2, [r3, r1]
+ 160:Core/Src/uart_handler.c ****         }
+ 349              		.loc 1 160 13 is_stmt 1 view .LVU60
+ 160:Core/Src/uart_handler.c ****         }
+ 350              		.loc 1 160 25 is_stmt 0 view .LVU61
+ 351 003e 084B     		ldr	r3, .L33+12
+ 352 0040 0122     		movs	r2, #1
+ 353 0042 1A70     		strb	r2, [r3]
+ 354 0044 E1E7     		b	.L26
+ 355              	.L30:
+ 174:Core/Src/uart_handler.c ****             }
+ 356              		.loc 1 174 17 is_stmt 1 view .LVU62
+ 357 0046 0122     		movs	r2, #1
+ 358 0048 044B     		ldr	r3, .L33+8
+ 359 004a 1944     		add	r1, r1, r3
+ 360 004c 0548     		ldr	r0, .L33+16
+ 361              	.LVL23:
+ 174:Core/Src/uart_handler.c ****             }
+ 362              		.loc 1 174 17 is_stmt 0 view .LVU63
+ 363 004e FFF7FEFF 		bl	HAL_UART_Receive_IT
+ 364              	.LVL24:
+ 365              		.loc 1 179 1 view .LVU64
+ 366 0052 DAE7     		b	.L26
+ 367              	.L34:
+ 368              		.align	2
+ 369              	.L33:
+ 370 0054 00100140 		.word	1073811456
+ 371 0058 00000000 		.word	rx_buffer_index
+ 372 005c 00000000 		.word	uart_rx_buffer
+ 373 0060 00000000 		.word	rx_complete
+ 374 0064 00000000 		.word	huart1
+ 375              		.cfi_endproc
+ 376              	.LFE139:
+ 378              		.global	rx_complete
+ 379              		.section	.bss.rx_complete,"aw",%nobits
+ 382              	rx_complete:
+ 383 0000 00       		.space	1
+ 384              		.global	rx_buffer_index
+ 385              		.section	.bss.rx_buffer_index,"aw",%nobits
+ 386              		.align	1
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 11
+
+
+ 389              	rx_buffer_index:
+ 390 0000 0000     		.space	2
+ 391              		.global	uart_tx_buffer
+ 392              		.section	.bss.uart_tx_buffer,"aw",%nobits
+ 393              		.align	2
+ 396              	uart_tx_buffer:
+ 397 0000 00000000 		.space	256
+ 397      00000000 
+ 397      00000000 
+ 397      00000000 
+ 397      00000000 
+ 398              		.global	uart_rx_buffer
+ 399              		.section	.bss.uart_rx_buffer,"aw",%nobits
+ 400              		.align	2
+ 403              	uart_rx_buffer:
+ 404 0000 00000000 		.space	256
+ 404      00000000 
+ 404      00000000 
+ 404      00000000 
+ 404      00000000 
+ 405              		.text
+ 406              	.Letext0:
+ 407              		.file 2 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 408              		.file 3 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 409              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+ 410              		.file 5 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltool
+ 411              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 412              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 413              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 414              		.file 9 "Core/Inc/main.h"
+ 415              		.file 10 "C:\\ST\\STM32CubeIDE_1.19.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltoo
+ 416              		.file 11 "Core/Inc/command_processor.h"
+ 417              		.file 12 "<built-in>"
+ARM GAS  C:\Users\User\AppData\Local\Temp\ccVEu3pq.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 uart_handler.c
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:21     .text.UART_Init:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:27     .text.UART_Init:00000000 UART_Init
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:74     .text.UART_Init:00000034 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:403    .bss.uart_rx_buffer:00000000 uart_rx_buffer
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:396    .bss.uart_tx_buffer:00000000 uart_tx_buffer
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:389    .bss.rx_buffer_index:00000000 rx_buffer_index
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:382    .bss.rx_complete:00000000 rx_complete
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:83     .text.UART_SendString:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:89     .text.UART_SendString:00000000 UART_SendString
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:121    .text.UART_SendString:00000018 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:126    .text.UART_SendChar:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:132    .text.UART_SendChar:00000000 UART_SendChar
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:166    .text.UART_SendChar:00000020 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:171    .text.UART_ReceiveString:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:177    .text.UART_ReceiveString:00000000 UART_ReceiveString
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:206    .text.UART_ReceiveString:00000014 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:211    .text.UART_ProcessReceivedData:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:217    .text.UART_ProcessReceivedData:00000000 UART_ProcessReceivedData
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:268    .text.UART_ProcessReceivedData:00000034 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:276    .text.HAL_UART_RxCpltCallback:00000000 $t
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:282    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:370    .text.HAL_UART_RxCpltCallback:00000054 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:383    .bss.rx_complete:00000000 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:386    .bss.rx_buffer_index:00000000 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:393    .bss.uart_tx_buffer:00000000 $d
+C:\Users\User\AppData\Local\Temp\ccVEu3pq.s:400    .bss.uart_rx_buffer:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_UART_Receive_IT
+huart1
+strlen
+HAL_UART_Transmit
+HAL_UART_Receive
+CommandProcessor_ProcessCommand
