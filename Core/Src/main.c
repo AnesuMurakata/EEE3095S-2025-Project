@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "uart_handler.h"
+#include "command_processor.h"
 #include <string.h>
 /* USER CODE END Includes */
 
@@ -94,9 +95,15 @@ int main(void)
   // Initialize UART handler
   UART_Init();
   
-  // Send Hello World message
-  UART_SendString("Hello World! STM32 UART is working!\r\n");
-  UART_SendString("Type something and press Enter to test echo...\r\n");
+  // Initialize command processor
+  CommandProcessor_Init();
+  
+  // Send startup message
+  UART_SendString("STM32 Data Locking Device Ready!\r\n");
+  UART_SendString("Commands: CONNECT, GET_CODE_1, GET_CODE_2, GET_CODE_3\r\n");
+  UART_SendString("         SET_CODE_1:<code>, SET_CODE_2:<code>, SET_CODE_3:<code>\r\n");
+  UART_SendString("         DISCONNECT\r\n");
+  UART_SendString("Type 'CONNECT' to start...\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */

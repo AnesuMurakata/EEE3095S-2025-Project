@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "command_processor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -123,11 +123,8 @@ void UART_ProcessReceivedData(void)
     /* USER CODE BEGIN UART_ProcessReceivedData */
     if (rx_complete)
     {
-        // Process the received data
-        // For now, just echo it back
-        UART_SendString("Echo: ");
-        UART_SendString(uart_rx_buffer);
-        UART_SendString("\r\n");
+        // Process the received data using command processor
+        CommandProcessor_ProcessCommand(uart_rx_buffer);
         
         // Clear buffer and reset
         memset(uart_rx_buffer, 0, UART_RX_BUFFER_SIZE);
