@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+#include "code_storage.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,16 +44,13 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-// Temporary storage for access codes (will be replaced with flash storage later)
-char access_codes[3][MAX_CODE_LENGTH];
-uint8_t codes_initialized = 0;
 uint8_t connection_status = 0;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-void CommandProcessor_InitializeCodes(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -67,7 +65,8 @@ void CommandProcessor_InitializeCodes(void);
 void CommandProcessor_Init(void)
 {
     /* USER CODE BEGIN CommandProcessor_Init */
-    CommandProcessor_InitializeCodes();
+    // Initialize code storage system
+    CodeStorage_Init();
     connection_status = 0;
     /* USER CODE END CommandProcessor_Init */
 }
@@ -281,14 +280,22 @@ void CommandProcessor_HandleGetCode(uint8_t codeIndex)
         return;
     }
     
-    // Check if code is set (not empty)
-    if (strlen(access_codes[codeIndex]) == 0)
+    // Check if code is set using flash storage
+    if (!CodeStorage_IsCodeSet(codeIndex))
     {
         CommandProcessor_SendResponse(RESP_ERROR_NOT_SET, NULL);
     }
     else
     {
-        CommandProcessor_SendResponse(RESP_OK, access_codes[codeIndex]);
+        char code_buffer[MAX_CODE_LENGTH];
+        if (CodeStorage_GetCode(codeIndex, code_buffer) == 0)
+        {
+            CommandProcessor_SendResponse(RESP_OK, code_buffer);
+        }
+        else
+        {
+            CommandProcessor_SendResponse(RESP_ERROR, NULL);
+        }
     }
     /* USER CODE END CommandProcessor_HandleGetCode */
 }
@@ -327,11 +334,15 @@ void CommandProcessor_HandleSetCode(uint8_t codeIndex, char* newCode)
         return;
     }
     
-    // Copy new code
-    strncpy(access_codes[codeIndex], newCode, MAX_CODE_LENGTH - 1);
-    access_codes[codeIndex][MAX_CODE_LENGTH - 1] = '\0'; // Ensure null termination
-    
-    CommandProcessor_SendResponse(RESP_OK, NULL);
+    // Store code using flash storage
+    if (CodeStorage_SetCode(codeIndex, newCode) == 0)
+    {
+        CommandProcessor_SendResponse(RESP_OK, NULL);
+    }
+    else
+    {
+        CommandProcessor_SendResponse(RESP_ERROR, NULL);
+    }
     /* USER CODE END CommandProcessor_HandleSetCode */
 }
 
@@ -348,22 +359,7 @@ void CommandProcessor_HandleDisconnect(void)
 }
 
 /* USER CODE BEGIN 4 */
-/**
-  * @brief  Initialize access codes array
-  * @retval None
-  */
-void CommandProcessor_InitializeCodes(void)
-{
-    if (!codes_initialized)
-    {
-        // Initialize all codes as empty
-        for (int i = 0; i < 3; i++)
-        {
-            memset(access_codes[i], 0, MAX_CODE_LENGTH);
-        }
-        codes_initialized = 1;
-    }
-}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN 5 */
